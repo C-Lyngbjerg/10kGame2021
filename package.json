@@ -1,0 +1,27 @@
+{
+  "name": "10kgame2021",
+  "version": "0.0.1",
+  "description": "Exam project for course NodeJS 2021 at KEA",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/C-Lyngbjerg/10kGame2021.git"
+  },
+  "keywords": [
+    "Node",
+    "game",
+    "express"
+  ],
+  "author": "C-Lyngbjerg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/C-Lyngbjerg/10kGame2021/issues"
+  },
+  "homepage": "https://github.com/C-Lyngbjerg/10kGame2021#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
