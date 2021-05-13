@@ -29,13 +29,14 @@ const queryText = 'SELECT * FROM users';
 //   });
 
 app.get("/", (req, res) => {
-    con.query(queryText, (err, rows, fields) => {
-        if(!err){
-            res.send(rows);
-        }else {
-            console.log(err);
-        }
-    });
+    // con.query(queryText, (err, rows, fields) => {
+    //     if(!err){
+    //         res.send(rows);
+    //     }else {
+    //         console.log(err);
+    //     }
+    // });
+    res.send({greetings: "hello"});
 });
 
 
