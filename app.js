@@ -4,9 +4,17 @@ const app = express();
 const con = require("./util/connection.js");
 const dotenv = require('dotenv').config();
 
-let resultArr = [];
 
 const queryText = 'SELECT * FROM users';
+let resultArr = con.query(queryText, (err, rows, fields) => {
+    if(!err){
+        resultArr = rows;
+    }else {
+        console.log(err);
+    }
+});
+
+
 
 // const testQ = mysql.query('SELECT * FROM users',(err, results, fields) => {
 //     // console.log(results); // results contains rows returned by server
@@ -36,7 +44,8 @@ app.get("/", (req, res) => {
     //         console.log(err);
     //     }
     // });
-    res.send({greetings: "hello"});
+    // res.send({greetings: "hello"});
+    res.send(resultArr);
 });
 
 
