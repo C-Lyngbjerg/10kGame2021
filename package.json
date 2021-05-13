@@ -4,7 +4,9 @@
   "description": "Exam project for course NodeJS 2021 at KEA",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "cross-env PORT=3000 nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
