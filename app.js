@@ -1,18 +1,35 @@
 const express = require('express');
 const app = express();
 
+const fs = require("fs");
 const con = require("./util/connection.js");
 const dotenv = require('dotenv').config();
 
+app.use(express.json());
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
+const pubDir = __dirname+"/public";
+
+const header = fs.readFileSync(pubDir+"/header.html", "utf-8");
+const footer = fs.readFileSync(pubDir+"/footer.html", "utf-8");
+
+const frontpage = fs.readFileSync(pubDir+"/frontpage/frontpage.html", "utf-8");
+
+
+const queryRouter = require("./routes/api-query.js");
+app.use(queryRouter.router);
+
 
 const queryText = 'SELECT * FROM users';
-let resultArr = con.query(queryText, (err, rows, fields) => {
-    if(!err){
-        resultArr = rows;
-    }else {
-        console.log(err);
-    }
-});
+// let resultArr = con.query(queryText, (err, rows, fields) => {
+//     if(!err){
+//         console.log(rows);
+//         resultArr = rows;
+//     }else {
+//         console.log(err);
+//     }
+// });
 
 
 
@@ -45,7 +62,9 @@ app.get("/", (req, res) => {
     //     }
     // });
     // res.send({greetings: "hello"});
-    res.send(resultArr);
+    //res.send(resultArr);
+    res.send(header+frontpage+footer);
+
 });
 
 
