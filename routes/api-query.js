@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const con = require("./connection.js");
+const con = require("../util/connection.js");
 // (async function getProjects() {
 //     try{
 //         const query = await con.query('SELECT * FROM users',(err, results, fields) => {
