@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/C-Lyngbjerg/10kGame2021#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cross-env": "^7.0.3",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

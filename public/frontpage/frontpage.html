@@ -1,8 +1,47 @@
 
         <div class="container">
             <div class="col-sm" id="obj">
-                    <h1>Users</h1>
-                    <ul class="list-group" id= "users"></ul>
+                    <h1>Login</h1>                    
+                <form method="POST" action = "/api/login"> 
+                        <div class="col-lg" id="obj">
+                            <div class="row">
+                                <input name= "email" id= "email" placeholder="Email">
+                            </div>
+                            <div class="row">
+                                <input type="password" name= "u_password" id="u_password" placeholder="Password">
+                            </div>
+                            <div class="row">
+                                <button id="logIn" class="btn btn-light">Log In</button>
+                            </div>
+                        </div>
+                </form>
             </div>
     </div>
-    <script src = "./frontpage/frontpage.js"></script>
+
+    <!-- onsubmit="asyncLoginFunc" -->
+    <!-- <script>
+        
+        // $( "#logIn" ).click(function() {    
+        //         const email =  document.getElementById("email").innerText;
+        //         const u_password =  document.getElementById("u_password").innerText; 
+        //         // console.log(email, u_password);
+        //         fetch("/api/login", {
+        //                 method: "POST",
+        //                 mode: 'cors', // this cannot be 'no-cors'
+        //                 headers: {
+        //                         'Accept': 'application/json',
+        //                         'Content-Type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify({ //formData
+        //                         email: email,//document.getElementById("email").innerText,
+        //                         // email: $("#email"),
+        //                         u_password: u_password//document.getElementById("u_password").innerText
+        //                         // u_password: $("#u_password")
+        //                 })
+        //         })
+        //         .then(response => response.json())
+        //         .then(console.log)
+        //         .catch(error => console.log(error));
+        // });
+    </script> -->
+    <!-- <script src = "./frontpage/frontpage.js"></script> -->

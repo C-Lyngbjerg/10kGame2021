@@ -17,7 +17,7 @@ const footer = fs.readFileSync(pubDir+"/footer.html", "utf-8");
 const frontpage = fs.readFileSync(pubDir+"/frontpage/frontpage.html", "utf-8");
 
 
-const queryRouter = require("./routes/api-query.js");
+const queryRouter = require("./routes/query.js");
 app.use(queryRouter.router);
 
 app.get("/", (req, res) => {
