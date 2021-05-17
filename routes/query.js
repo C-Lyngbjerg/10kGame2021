@@ -25,10 +25,11 @@ router.post("/api/create-user", async (req, res) => {
             "error" : error });      
         } else {    
             console.log(results);    
-            res.send({          
-            "code":200,          
-            "success":"user registered sucessfully",
-            "ID":results.insertID });        
+            // res.send({          
+            // "code":200,          
+            // "success":"user registered sucessfully",
+            // "ID":results.insertID });      
+            res.redirect('/play');  
         }    
     });
 });

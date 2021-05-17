@@ -19,12 +19,13 @@ app.use(express.urlencoded({ extended: true }));
 
 const pubDir = __dirname+"/public";
 
-const headerAnon = fs.readFileSync(pubDir+'/header/headerAnon.html', 'utf-8');
-const headerUser = fs.readFileSync(pubDir+'/header/headerUser.html', 'utf-8');
+const header = fs.readFileSync(pubDir+'/header/header.html', 'utf-8');
+// const headerUser = fs.readFileSync(pubDir+'/header/headerUser.html', 'utf-8');
 const footer = fs.readFileSync(pubDir+'/footer/footer.html', 'utf-8');
 
 const frontPage = fs.readFileSync(pubDir+"/frontpage/frontpage.html", "utf-8");
 const loginPage = fs.readFileSync(pubDir+"/login/login.html", "utf-8");
+const playPage = fs.readFileSync(pubDir+"/play/play.html", "utf-8");
 
 
 const queryRouter = require("./routes/query.js");
@@ -32,11 +33,19 @@ app.use(queryRouter.router);
 const authRouter = require("./routes/auth.js");
 app.use(authRouter.router);
 
+// function setNavActive(navItem) {
+//     return header.replace(`"nav-link" href="/${navItem}`, `"nav-link active" href="/${navItem}`)
+// }
+
+function setNavAuthState() {
+    return header.replace('href="/login"> Log In</a>','href="/logout"> Log Out</a>')
+}
+
 app.get("/", (req, res) => {
     if(req.session.isAuth){
-        res.send(headerUser+frontPage+footer);
+        res.send(setNavAuthState()+frontPage+footer);
     }else{
-        res.send(headerAnon+frontPage+footer);
+        res.send(header+frontPage+footer);
     }
     
 });
@@ -46,15 +55,28 @@ app.get('/logout',(req,res) => {
         if(err) {
             return console.log(err);
         }
-        console.log('session destroyeeeeed');
+        console.log('session ended');
         res.redirect('/');
     });
 
 });
 
 app.get('/login',(req,res) => {
-    res.send(headerAnon+loginPage+footer);
+    res.send(header+loginPage+footer);
 
+});
+
+app.get('/play',(req,res) => {
+    res.send(header+playPage+footer);  
+
+    /* disabled for ease of testing
+    if(req.session.isAuth){
+        console.log(req.session.isAuth);
+        res.send(headerUser+playPage+footer);  
+    }else{
+        res.redirect("/login");
+    }
+    */
 });
 
 const PORT = process.env.PORT || 8080;

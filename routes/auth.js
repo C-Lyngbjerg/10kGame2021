@@ -49,7 +49,7 @@ router.get('/api/isAuth', (req, res) => {
     if(req.session.isAuth){
         console.log(req.session.isAuth);
         // res.send({isAuth:true});
-        res.redirect("/");
+        res.redirect("/play");
         
     }else{
         // res.send({isAuth:false});

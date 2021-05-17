@@ -11,28 +11,36 @@
 </head>
 <body>
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light justify-content-between">
         <!-- Navbar text-->
-        <div class="col">
+        <div >
             <a class="navbar-brand" href="/">
                 Home
             </a>
         </div>
+        <div >
+            <ul id="navLinkList"class="navbar-nav" style="padding-right: 3rem;">
+                <li class="nav-item active">
+                    <a class="nav-item nav-link" href="/"> Leaderboard</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-item nav-link" href="/"> Contact</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-item nav-link" href="https://en.wikipedia.org/wiki/Dice_10000" target="_blank"> Rules</a>
+                </li>
+            </ul>
+        </div>
         <!-- Links -->
-        <ul id="navLinkList"class="navbar-nav ms-auto" style="padding-right: 3rem;">
-            <li class="nav-item active">
-                <a class="nav-item nav-link" href="/"> Leaderboard</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-item nav-link" href="/"> Contact</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-item nav-link" href="/"> Rules</a>
-            </li>
+        <div >
+            <ul id="navLinkList"class="navbar-nav ms-auto">
+            
             <li class="nav-item active">
                 <a class="nav-item nav-link" href="/login"> Log In</a>
             </li>
         </ul>
+        </div>
+        
 
         <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav justify-content-start">
@@ -46,6 +54,5 @@
            
         </div> -->
     </nav>
-    <p>""</p>
-    <p>""</p>
-    <div style="min-height: calc(100vh - 100px)" id="main-content">
+
+    <div style="min-height: calc(100vh - 100px); margin-top: 5rem;" id="main-content">
