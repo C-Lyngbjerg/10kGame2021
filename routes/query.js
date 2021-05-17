@@ -6,13 +6,14 @@ const saltRounds = 12;
 // ----------------------------- CREATE ----------------------------- //
 // Create User
 router.post("/api/create-user", async (req, res) => {
+    console.log(req.body);
     let user = {
         email: req.body.email,
         u_name: req.body.u_name,
         mmr: 1000,
         u_password: req.body.u_password
     }
-
+    console.log(user);
     user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
     
     con.query('INSERT INTO users SET ?',user, (error, results, fields) => {      
@@ -90,40 +91,6 @@ router.delete("/api/delete-user/:id", (req, res) => {
         }
     });
 });
-
-
-// Login
-/*
-SELECT WHERE query with prepared statement that creates an async callback to then use the bcrypt compare function 
-of unhashed password from login attempt and hashed password from db and returns boolean which we can send the 
-login page in future for redirect based on that.
-*/
-router.post("/api/login", (req, res) => {
-    let user = {
-        email: req.body.email,
-        u_password: req.body.u_password
-    }
-    let loginResult;
-    con.query('SELECT (u_password) FROM `users` WHERE email = ?', user.email , async (err, result, fields) => {
-        if(!err){
-            loginResult = await bcrypt.comparePass(user.u_password, result[0].u_password, () => {
-                
-            });
-            if(loginResult){
-                console.log("success: "+loginResult);
-                res.send({success:loginResult});
-            }else{
-                console.log("failure: "+loginResult);
-                res.send({failure:loginResult});
-            }
-
-        }else {
-            console.log(err);
-        }
-    });
-});
-
-
 
 
 module.exports = {
