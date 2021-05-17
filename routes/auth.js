@@ -47,9 +47,13 @@ router.get('/api/logout',(req,res) => {
 
 router.get('/api/isAuth', (req, res) => {
     if(req.session.isAuth){
-        res.send({isAuth:'yes'});
+        console.log(req.session.isAuth);
+        // res.send({isAuth:true});
+        res.redirect("/");
+        
     }else{
-        res.send({isAuth:false});
+        // res.send({isAuth:false});
+        res.redirect("/login");
     }
 });
 
