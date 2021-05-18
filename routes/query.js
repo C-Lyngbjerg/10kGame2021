@@ -97,17 +97,3 @@ router.delete("/api/delete-user/:id", (req, res) => {
 module.exports = {
     router
 }
-
-
-/*
-Delete by ID post request to avoid sending id as param
-router.post("/api/delete-user", (req, res) => {
-    con.query('DELETE FROM `users` WHERE id = ?',req.body.id,  (err, result, fields) => {
-        if(!err){
-            res.send(result);
-        }else {
-            console.log(err);
-        }
-    });
-});
-*/

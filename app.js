@@ -29,9 +29,12 @@ const playPage = fs.readFileSync(pubDir+"/play/play.html", "utf-8");
 
 
 const queryRouter = require("./routes/query.js");
-app.use(queryRouter.router);
 const authRouter = require("./routes/auth.js");
+const gameRouter = require("./routes/game.js");
+
+app.use(queryRouter.router);
 app.use(authRouter.router);
+app.use(gameRouter.router);
 
 // function setNavActive(navItem) {
 //     return header.replace(`"nav-link" href="/${navItem}`, `"nav-link active" href="/${navItem}`)
@@ -87,3 +90,21 @@ app.listen(PORT, (error) => {
         console.log('Server is now running on port ', Number(PORT));
     }
 });
+
+
+/* 
+TODO:
+- Leaderboard
+- Contact
+- Mail on signup
+- Rules page
+- Chat
+- VS AI
+    - Basically all game logic
+- VS Player
+    - 'Matchmaking'
+        - stack
+    - Everything
+    - Sockets
+
+*/

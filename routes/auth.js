@@ -25,7 +25,6 @@ router.post("/auth/login", (req, res) => {
                 req.session.mmr = result[0].mmr;
 
                 console.log("success: "+loginResult+", isAuth: "+req.session.isAuth+', user: '+req.session.u_name+', email: '+req.session.email+', userID: '+req.session.u_id+', ID: '+req.session.id);
-                // res.send({success:loginResult, isAuth:req.session.isAuth, id:req.session.id});
                 res.redirect("/");
             }else{
                 console.log("failure: "+loginResult);
@@ -38,7 +37,7 @@ router.post("/auth/login", (req, res) => {
     });
 });
 
-router.get('/auth/logout',(req,res) => {
+router.get('/auth/logout', (req,res) => {
     req.session.destroy((err) => {
         if(err) {
             return console.log(err);
@@ -51,11 +50,9 @@ router.get('/auth/logout',(req,res) => {
 router.get('/auth/is_auth', (req, res) => {
     if(req.session.isAuth){
         console.log(req.session.isAuth);
-        // res.send({isAuth:true});
         res.redirect("/play");
         
     }else{
-        // res.send({isAuth:false});
         res.redirect("/login");
     }
 });
@@ -63,7 +60,7 @@ router.get('/auth/is_auth', (req, res) => {
 router.post('/auth/get-user', (req, res) => {
     if(req.session.isAuth){
         console.log(req.session.isAuth);
-        console.log(/*"success: "+loginResult+*/", isAuth: "+req.session.isAuth+', user: '+req.session.u_name+', email: '+req.session.email+', userID: '+req.session.u_id+', ID: '+req.session.id);
+        console.log("isAuth: "+req.session.isAuth+', user: '+req.session.u_name+', email: '+req.session.email+', userID: '+req.session.u_id+', ID: '+req.session.id);
 
         const user = {
             user: req.session.u_name,
@@ -74,10 +71,11 @@ router.post('/auth/get-user', (req, res) => {
         res.send(user);
         
     }else{
-        // res.send({isAuth:false});
         res.redirect("/login");
     }
 });
+
+
 module.exports = {
     router
 }
