@@ -1,4 +1,6 @@
 let user;
+let diceArray = [];
+const diceIconArray = ['zero','one', 'two', 'three', 'four', 'five', 'six']
 
 $(document).ready(function () {
     // On load change name of player to actual player username
@@ -65,23 +67,28 @@ const getDiceRolls = function () {
             console.log(data);
             const diceList = $('#dice_list');
             diceList.empty();
+            // diceArray = [];
             diceArray = data.map((die) => {
                 if (die.value !== -1) {
                     console.log(die.name, 'and ', die.value);
-
+                    
                     const diceListItem = $(`<li class="list-group-item px-md-5" id="${die.name}">`);
 
                     const rowOne = $(`<div class= "row"></div> `);
-                    rowOne.append($('<h2></h2>').text(die.value));
+                    // rowOne.append($('<h2></h2>').text(die.value));
+                    rowOne.append( $(`<i class="fas fa-dice-${diceIconArray[die.value]} fa-3x"></i>`));
                     diceListItem.append(rowOne);
 
-                    const rowTwo = $(`<div class= "row"></div> `);
+                    const rowTwo = $(`<div class= "row justify-content-center"></div> `);
                     rowTwo.append($(`<input type="checkbox"id="cb_${die.name}">`));
                     diceListItem.append(rowTwo);
 
                     diceList.append(diceListItem);
+                    return die;
+                    
                 }
             });
+            console.log(diceArray);
         },
     });
 };
