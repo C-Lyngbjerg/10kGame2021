@@ -8,5 +8,4 @@ const connection = mysql.createPool({
     database: process.env.DB_DATABASE,
 });
 
-console.log(process.env.DB_DATABASE);
 module.exports = connection;
