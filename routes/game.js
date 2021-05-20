@@ -28,14 +28,13 @@ let diceRolls = [
     },
 ];
 
+
+
+
 router.post('/game/get-dice-rolls', (req, res) => {
-    rollDice(diceLeft);
+    rollDice(diceLeft); // rolls the new dice
     res.send(diceRolls);
 });
-
-function getRandomInt() {
-    return Math.floor(Math.random() * 6) + 1;
-}
 
 // function to populate diceRolls[] with random die.value between 1-6
 const rollDice = (diceLeft) => {
@@ -49,6 +48,10 @@ const rollDice = (diceLeft) => {
         }
     });
 };
+
+function getRandomInt() {
+    return Math.floor(Math.random() * 6) + 1;
+}
 
 module.exports = {
     router,
