@@ -20,9 +20,7 @@ $(document).ready(function () {
     // On load change name of player to actual player username
     getUser();
 
-    titleName.text(user.user + ' is playing vs AI');
-    tempName.text(user.user + ': ' + userTempPoints);
-    bankName.text(user.user + ': ' + userBankPoints);
+    updateDisplay();
 
     // get initial diceRolls
     getDiceRolls();
@@ -31,18 +29,20 @@ $(document).ready(function () {
 /*  -------------------------- ROLL_BUTTON -------------------------- 
     On click for roll button
     Which has to do the following in order:
-    1. check chosen dice and calculate points 
-    2. add to temporary points
-    3. roll new dice
+    1. check chosen dice 
+    2. calculate points 
+    3. add to temporary points
+    4. roll new dice
 */
 $('#roll_button').click(function () {
-    // 1. Calculate points for chosen dice
+    // 1. Populate chosenDice Array
+    let chosenDice = chosenDiceFromCheckBoxes();
+
+    // 2. Calculate points for chosen dice and add to temporary points
     calculatePoints(chosenDice);
 
-    // 2. Add to the temporary points total
-    addToTempPoints();
-
     // 3. Retrieve new dice rolls from game.js
+    validDiceArray = [];
     getDiceRolls();
 });
 
@@ -55,9 +55,20 @@ $('#roll_button').click(function () {
 */
 $('#bank_button').click(function () {});
 
-/* -------------------------- FUNCTIONS -------------------------- 
-    
-*/
+/* -------------------------- FUNCTIONS -------------------------- */
+
+function chosenDiceFromCheckBoxes() {
+    tempArray = validDiceArray
+        .map((die) => {
+            if ($('#cb_' + die.name).is(':checked')) {
+                return die.value; // NOTE: return just the number
+            } else {
+                return null;
+            }
+        })
+        .filter((die) => die !== null);
+    return tempArray;
+}
 
 function getDiceRolls() {
     $.ajax({
@@ -91,19 +102,22 @@ function getDiceRolls() {
 // NOTE: empty function
 function calculatePoints(chosenDice) {
     $.ajax({
-        type: 'POST',
-        async: false,
-        data: { chosenDice }, //JSON.stringify(user),
-        contentType: 'application/json',
+        method: 'POST',
+        // async: false,
         url: '/game/calculate',
+        headers: { 'Content-type': 'application/json' },
+        data: JSON.stringify({ chosenDice }), //{ chosenDice },
         success: function (data) {
-            // add to temp points
+            // add to pointsDisplay
+            // console.log(data);
+            userTempPoints += data.score;
+            updateDisplay();
         },
     });
 }
 
 // NOTE: empty function
-function addToTempPoints() {}
+function addToPoints() {}
 
 function endTurn() {}
 
@@ -124,7 +138,7 @@ function populateDiceList(die, diceList) {
 
     const rowTwo = $(`<div class= "row justify-content-center"></div> `);
     rowTwo.append($(`<input type="checkbox"id="cb_${die.name}">`));
-    validDiceArray.append(die.name);
+    validDiceArray.push(die);
     diceListItem.append(rowTwo);
 
     diceList.append(diceListItem);
@@ -153,11 +167,17 @@ function getUser() {
         data: {}, //JSON.stringify(user),
         contentType: 'application/json',
         url: '/auth/get-user',
-        success: function (data) {
+        success: (data) => {
             console.log('success');
             console.log(data);
             user = data;
             console.log(user);
         },
     });
+}
+
+function updateDisplay() {
+    titleName.text(user.user + ' is playing vs AI');
+    tempName.text(user.user + ': ' + userTempPoints);
+    bankName.text(user.user + ': ' + userBankPoints);
 }
