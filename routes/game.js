@@ -36,8 +36,17 @@ router.post('/game/get-dice-rolls', (req, res) => {
     res.send(diceRolls);
 });
 
+router.post('/game/calculate', (req, res) => {
+    calculatePoints(diceRolledPoints); // rolls the new dice
+    res.send(diceRolls);
+});
+
+function calculatePoints(diceRolledPoints) {
+    
+}
+
 // function to populate diceRolls[] with random die.value between 1-6
-const rollDice = (diceLeft) => {
+function rollDice (diceLeft) {
     diceRolls.map((die) => {
         if (die.name > diceLeft) {
             // die.name = 'd'+die.name;

@@ -1,22 +1,34 @@
+// -------- game elements --------
 let user;
 let diceArray = [];
+let validDiceArray = [];
 const diceIconArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
+
+let userTempPoints = 0;
+let aiTempPoints = 0;
+let userBankPoints = 0;
+let aiBankPoints = 0;
+
+// -------- HTML elements as consts --------
 const titleName = $('#title_name');
 const tempName = $('#temp_name');
 const bankName = $('#bank_name');
 const status_message = $('#status_message');
 
+// -------------------------- DOCUMENT READY --------------------------
 $(document).ready(function () {
     // On load change name of player to actual player username
     getUser();
+
     titleName.text(user.user + ' is playing vs AI');
-    tempName.text(user.user + ': 100');
-    bankName.text(user.user + ': 0');
+    tempName.text(user.user + ': ' + userTempPoints);
+    bankName.text(user.user + ': ' + userBankPoints);
+
     // get initial diceRolls
     getDiceRolls();
 });
 
-/* 
+/*  -------------------------- ROLL_BUTTON -------------------------- 
     On click for roll button
     Which has to do the following in order:
     1. check chosen dice and calculate points 
@@ -25,7 +37,7 @@ $(document).ready(function () {
 */
 $('#roll_button').click(function () {
     // 1. Calculate points for chosen dice
-    calculatePoints();
+    calculatePoints(chosenDice);
 
     // 2. Add to the temporary points total
     addToTempPoints();
@@ -34,7 +46,7 @@ $('#roll_button').click(function () {
     getDiceRolls();
 });
 
-/*
+/* -------------------------- BANK_BUTTON -------------------------- 
     On click for bank button
     1. get points from temporary points
     2. add to banked points
@@ -43,7 +55,9 @@ $('#roll_button').click(function () {
 */
 $('#bank_button').click(function () {});
 
-// sets let user to req.session user
+/* -------------------------- FUNCTIONS -------------------------- 
+    
+*/
 
 function getDiceRolls() {
     $.ajax({
@@ -67,28 +81,31 @@ function getDiceRolls() {
             } else {
                 noValidChoiceFound();
                 // TODO: endTurn();
+                // NOTE: show or nah the dice even though turn ends?
             }
             console.log(diceArray);
         },
     });
 }
 
-
 // NOTE: empty function
-function calculatePoints() {
-    // $.ajax({
-    //     type: 'POST',
-    //     async:false,
-    //     data: {},//JSON.stringify(user),
-    //     contentType: 'application/json',
-    //     url: '/game/calculate',
-    //     success: function(data) {
-    //     }
-    // });
+function calculatePoints(chosenDice) {
+    $.ajax({
+        type: 'POST',
+        async: false,
+        data: { chosenDice }, //JSON.stringify(user),
+        contentType: 'application/json',
+        url: '/game/calculate',
+        success: function (data) {
+            // add to temp points
+        },
+    });
 }
 
 // NOTE: empty function
 function addToTempPoints() {}
+
+function endTurn() {}
 
 // NOTE: should call endTurn(); when ready
 function noValidChoiceFound() {
@@ -107,6 +124,7 @@ function populateDiceList(die, diceList) {
 
     const rowTwo = $(`<div class= "row justify-content-center"></div> `);
     rowTwo.append($(`<input type="checkbox"id="cb_${die.name}">`));
+    validDiceArray.append(die.name);
     diceListItem.append(rowTwo);
 
     diceList.append(diceListItem);
