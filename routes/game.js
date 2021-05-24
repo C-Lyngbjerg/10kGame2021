@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+let turnInfo = {};
+let user = {};
 let diceLeft = 6;
 let diceRolls = [
     {
@@ -60,25 +62,36 @@ let diceChosen = [
     },
 ];
 router.post('/game/get-dice-rolls', (req, res) => {
-    rollDice(diceLeft); // rolls the new dice
+    rollDice(turnInfo.diceLeft); // rolls the new dice
     res.send(diceRolls);
 });
 
 router.post('/game/calculate', (req, res) => {
-    const chosenDicePoints = req.body.chosenDice;
-    console.log(chosenDicePoints);
-    const score = calculatePoints(chosenDicePoints); // calculates the points and returns score
-    console.log(score);
-    res.send({ score });
+    turnInfo = req.body.turnInfo;
+    user = req.body.user;
+
+    console.log('calculate turninfo: ',turnInfo);
+    user.tempPoints += calculatePoints(turnInfo.chosenDice); // calculates the points and returns score
+    console.log('calculate user : ',user);
+    res.send({ turnInfo:turnInfo, user: user});
 });
 
 // TODO: endturn() reset diceLeft
 // NOTE: here or in play.js?
+// here but some functionality in play.js
+router.post('/game/end-turn', (req, res) => {
+    const points = req.body.points;
+    if (points == 0) {
+    }
+});
 
 // NOTE: needs input validation
 function calculatePoints(data) {
     let score = 0;
     console.log(data);
+
+    // simpleDie represents the number value of each die chosen
+    // is used to increase the count value which is used in the next .map function to calculate the points
     data.map((simpleDie) => {
         if (simpleDie !== 0) {
             let indexOfCurrentDie = diceChosen.findIndex((i) => i.name === simpleDie);
@@ -86,6 +99,8 @@ function calculatePoints(data) {
         }
     });
 
+    // diceChosen contains for each die: name (number), count of occurences in current roll
+    // and multiplier for the die.
     diceChosen.map((die) => {
         if (die.count !== 0) {
             if (die.name === 1 && die.count < 3) {
@@ -98,11 +113,18 @@ function calculatePoints(data) {
             console.log(score);
         }
     });
-    diceLeft -= data.length;
-    if (diceLeft === 0) {
-        diceLeft = 6;
+    
+    // remove # dice left equal to count of dice chosen
+    turnInfo.diceLeft -= data.length;
+
+    // if all dice are used, then reset diceLeft to 6
+    if (turnInfo.diceLeft === 0) {
+        turnInfo.diceLeft = 6;
     }
+
     console.log(diceChosen);
+
+    // clears count value at the end for next call
     diceChosen.map((die) => {
         die.count = 0;
     });

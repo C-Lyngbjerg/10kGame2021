@@ -1,25 +1,36 @@
 // -------- game elements --------
-let user;
+let user = {
+    u_id: 0,
+    email: 'placeholder',
+    u_name: 'placeholder',
+    mmr: 0,
+    tempPoints: 0,
+    bankPoints: 0,
+};
+
+let turnInfo = {
+    diceLeft: 6,
+    chosenDice: [],
+    aiTempPoints: 0,
+    aiBankPoints: 0,
+};
+
 let diceArray = [];
 let validDiceArray = [];
 const diceIconArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
-
-let userTempPoints = 0;
-let aiTempPoints = 0;
-let userBankPoints = 0;
-let aiBankPoints = 0;
 
 // -------- HTML elements as consts --------
 const titleName = $('#title_name');
 const tempName = $('#temp_name');
 const bankName = $('#bank_name');
 const status_message = $('#status_message');
+const diceList = $('#dice_list');
 
 // -------------------------- DOCUMENT READY --------------------------
-$(document).ready(function () {
-    // On load change name of player to actual player username
-    getUser();
-
+$(document).ready(async () => {
+    // On load retrieves user information from /game/get-user from session information
+    await getUser();
+    // Sets name of player to actual player username
     updateDisplay();
 
     // get initial diceRolls
@@ -28,18 +39,13 @@ $(document).ready(function () {
 
 /*  -------------------------- ROLL_BUTTON -------------------------- 
     On click for roll button
-    Which has to do the following in order:
-    1. check chosen dice 
-    2. calculate points 
-    3. add to temporary points
-    4. roll new dice
 */
 $('#roll_button').click(function () {
     // 1. Populate chosenDice Array
-    let chosenDice = chosenDiceFromCheckBoxes();
+    turnInfo.chosenDice = chosenDiceFromCheckBoxes();
 
     // 2. Calculate points for chosen dice and add to temporary points
-    calculatePoints(chosenDice);
+    getPointsCalculation();
 
     // 3. Retrieve new dice rolls from game.js
     validDiceArray = [];
@@ -61,7 +67,7 @@ function chosenDiceFromCheckBoxes() {
     tempArray = validDiceArray
         .map((die) => {
             if ($('#cb_' + die.name).is(':checked')) {
-                return die.value; // NOTE: return just the number
+                return die.value; // NOTE: returns just the number value
             } else {
                 return null;
             }
@@ -70,16 +76,16 @@ function chosenDiceFromCheckBoxes() {
     return tempArray;
 }
 
+// TODO: fix ajax style to match calculatePoints()
 function getDiceRolls() {
     $.ajax({
-        type: 'POST',
-        async: false,
+        method: 'POST',
         data: {}, //JSON.stringify(user),
-        contentType: 'application/json',
+        headers: { 'Content-type': 'application/json' },
         url: '/game/get-dice-rolls',
         success: function (data) {
-            console.log('success', data);
-            const diceList = $('#dice_list');
+            console.log('getDiceRolls data : ', data);
+
             diceList.empty();
             if (checkValuesRolled(data)) {
                 // Truthy if values rolled contain >= 1 valid choice
@@ -92,25 +98,27 @@ function getDiceRolls() {
             } else {
                 noValidChoiceFound();
                 // TODO: endTurn();
+                endTurn(false);
                 // NOTE: show or nah the dice even though turn ends?
             }
-            console.log(diceArray);
+            console.log('getDiceRolls diceArray: ',diceArray);
         },
     });
 }
 
-// NOTE: empty function
-function calculatePoints(chosenDice) {
+function getPointsCalculation() {
     $.ajax({
         method: 'POST',
-        // async: false,
         url: '/game/calculate',
         headers: { 'Content-type': 'application/json' },
-        data: JSON.stringify({ chosenDice }), //{ chosenDice },
+        data: JSON.stringify({ turnInfo, user }),
         success: function (data) {
-            // add to pointsDisplay
-            // console.log(data);
-            userTempPoints += data.score;
+            console.log('check data return getPoints: ',data);
+            turnInfo = data.turnInfo;
+            user = data.user;
+            console.log('check turnInfo after set getPoints: ',turnInfo);
+            console.log('check user after set getPoints: ',user);
+
             updateDisplay();
         },
     });
@@ -119,7 +127,30 @@ function calculatePoints(chosenDice) {
 // NOTE: empty function
 function addToPoints() {}
 
-function endTurn() {}
+// NOTE: WIP
+// trying to make it general to both in- and voluntary ending of turns
+function endTurn(voluntary) {
+    const points = 0;
+    if (voluntary) {
+        points = user.tempPoints;
+        user.bankPoints += user.tempPoints;
+    } else {
+        user.tempPoints = 0;
+    }
+    $.ajax({
+        method: 'POST',
+        url: '/game/end-turn',
+        headers: { 'Content-type': 'application/json' },
+        data: JSON.stringify({ points }),
+        success: function (data) {
+            /* 
+            TODO : 
+            handle AI turn in game.js
+            how to handle in- or voluntary end turn differences
+             */
+        },
+    });
+}
 
 // NOTE: should call endTurn(); when ready
 function noValidChoiceFound() {
@@ -160,24 +191,29 @@ function checkValuesRolled(data) {
 }
 
 // requests and then populates the user constant with req.session info from /auth/
-function getUser() {
-    $.ajax({
-        type: 'POST',
-        async: false,
+async function getUser() {
+    await $.ajax({
+        method: 'POST',
         data: {}, //JSON.stringify(user),
-        contentType: 'application/json',
+        headers: { 'Content-type': 'application/json' },
         url: '/auth/get-user',
         success: (data) => {
-            console.log('success');
-            console.log(data);
-            user = data;
-            console.log(user);
+            console.log('getUser: ', data);
+            user = {
+                u_id: data.u_id,
+                email: data.email,
+                u_name: data.user,
+                mmr: data.mmr,
+                tempPoints: data.tempPoints,
+                bankPoints: data.tempPoints,
+            };
         },
     });
 }
 
+// updates the displayed names and points values
 function updateDisplay() {
-    titleName.text(user.user + ' is playing vs AI');
-    tempName.text(user.user + ': ' + userTempPoints);
-    bankName.text(user.user + ': ' + userBankPoints);
+    titleName.text(user.u_name + ' is playing vs AI');
+    tempName.text(user.u_name + ': ' + user.tempPoints);
+    bankName.text(user.u_name + ': ' + user.bankPoints);
 }
