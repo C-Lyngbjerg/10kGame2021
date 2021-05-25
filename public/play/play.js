@@ -82,6 +82,7 @@ $('#bank_button').click(async function () {
 /* -------------------------- BANK_BUTTON --------------------------
  */
 $('#ready_button').click(function () {
+
     beginNewTurn();
 });
 /* -------------------------- FUNCTIONS -------------------------- 
@@ -205,6 +206,7 @@ function endTurn(voluntary) {
 }
 
 function beginNewTurn() {
+    status_message.text('Your turn');
     readyButton.hide();
     console.log('beginNewTurn: ', turnInfo);
     getDiceRolls();
