@@ -1,7 +1,14 @@
 const router = require('express').Router();
 
 let turnInfo = {};
-let user = {};
+let user = {
+    u_id: 0,
+    email: 'placeholder',
+    u_name: 'placeholder',
+    mmr: 0,
+    tempPoints: 0,
+    bankPoints: 0,
+};
 let diceLeft = 6;
 let diceRolls = [
     {
@@ -69,11 +76,13 @@ router.post('/game/get-dice-rolls', (req, res) => {
 router.post('/game/calculate', (req, res) => {
     turnInfo = req.body.turnInfo;
     user = req.body.user;
+    user.tempPoints = Number(user.tempPoints);
+    if (typeof user.tempPoints !== 'number') {
+        user.tempPoints == 0;
+    }
 
-    console.log('calculate turninfo: ',turnInfo);
     user.tempPoints += calculatePoints(turnInfo.chosenDice); // calculates the points and returns score
-    console.log('calculate user : ',user);
-    res.send({ turnInfo:turnInfo, user: user});
+    res.send({ turnInfo: turnInfo, user: user });
 });
 
 // TODO: endturn() reset diceLeft
@@ -113,7 +122,7 @@ function calculatePoints(data) {
             console.log(score);
         }
     });
-    
+
     // remove # dice left equal to count of dice chosen
     turnInfo.diceLeft -= data.length;
 
@@ -122,8 +131,8 @@ function calculatePoints(data) {
         turnInfo.diceLeft = 6;
     }
 
-    console.log(diceChosen);
-
+    // console.log('diceChosen: ', diceChosen);
+    // console.log('score: ', score);
     // clears count value at the end for next call
     diceChosen.map((die) => {
         die.count = 0;

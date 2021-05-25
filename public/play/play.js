@@ -23,6 +23,8 @@ const diceIconArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
 const titleName = $('#title_name');
 const tempName = $('#temp_name');
 const bankName = $('#bank_name');
+const aiTempName = $('#ai_temp_name');
+const aiBankName = $('#ai_bank_name');
 const status_message = $('#status_message');
 const diceList = $('#dice_list');
 
@@ -59,7 +61,19 @@ $('#roll_button').click(function () {
     3. clear temporary points
     4. end turn
 */
-$('#bank_button').click(function () {});
+$('#bank_button').click(function () {
+    // Add to banked points
+    user.bankPoints += user.tempPoints;
+    
+    // clear temporary points
+    user.tempPoints = 0;
+    updateDisplay();
+
+    // temporary fix until 
+    status_message.text('You have banked your points. \nEnding Turn');
+    // call endturn method with truthy voluntary 
+    // endTurn(true);
+});
 
 /* -------------------------- FUNCTIONS -------------------------- */
 
@@ -101,7 +115,7 @@ function getDiceRolls() {
                 endTurn(false);
                 // NOTE: show or nah the dice even though turn ends?
             }
-            console.log('getDiceRolls diceArray: ',diceArray);
+            console.log('getDiceRolls diceArray: ', diceArray);
         },
     });
 }
@@ -113,12 +127,8 @@ function getPointsCalculation() {
         headers: { 'Content-type': 'application/json' },
         data: JSON.stringify({ turnInfo, user }),
         success: function (data) {
-            console.log('check data return getPoints: ',data);
             turnInfo = data.turnInfo;
             user = data.user;
-            console.log('check turnInfo after set getPoints: ',turnInfo);
-            console.log('check user after set getPoints: ',user);
-
             updateDisplay();
         },
     });
@@ -204,8 +214,8 @@ async function getUser() {
                 email: data.email,
                 u_name: data.user,
                 mmr: data.mmr,
-                tempPoints: data.tempPoints,
-                bankPoints: data.tempPoints,
+                tempPoints: user.tempPoints,
+                bankPoints: user.tempPoints,
             };
         },
     });
@@ -216,4 +226,6 @@ function updateDisplay() {
     titleName.text(user.u_name + ' is playing vs AI');
     tempName.text(user.u_name + ': ' + user.tempPoints);
     bankName.text(user.u_name + ': ' + user.bankPoints);
+    aiTempName.text('AI : ' + turnInfo.aiTempPoints);
+    aiBankName.text('AI : ' + turnInfo.aiBankPoints);
 }
