@@ -1,36 +1,49 @@
 <div class="container-fluid px-md-5">
+    <!-- <NAME> IS PLAYING VS AI -->
     <div class="row justify-content-md-center">
         <div class="col-md-auto" id="obj">
             <h1 id="title_name"></h1>
         </div>
     </div>
+
+    <!-- TEMP POINTS, MESSAGE WINDOW, BANKED POINTS -->
     <div class="row justify-content-between pt-md-5">
-        <!-- cols which holds, from left to right temp points, nothing?, banked points -->
-        <div class="col-sm-2" id="obj">
+        <div class="col-sm-3" id="obj">
             <h5>Temporary Points</h5>
             <ul class="list-group" id="temp_points">
                 <li class="list-group-item" id="temp_name">Player: 100</li>
-                <li class="list-group-item">AI: 0</li>
+                <li class="list-group-item" id="ai_temp_name">AI: 0</li>
             </ul>
         </div>
-        <div class="col-sm-2" id="obj">
-            <ul class="list-group pt-md-5">
-                <li class="list-group-item">
-                    <h5 style="text-align: center" id="status_message">Your turn</h5>
-                </li>
-            </ul>
+        <div class="col-sm-4" id="obj">
+            <div class="row justify-content-center" style="margin-bottom: 2rem">
+                <ul class="list-group pt-md-5">
+                    <li class="list-group-item">
+                        <h5 style="text-align: center" id="status_message">Your turn</h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="row justify-content-center">
+                <button id="ready_button" class="btn btn-light btn-lg" >
+                    Ready
+                </button>
+            </div>
         </div>
-        <div class="col-sm-2" id="obj">
+        <div class="col-sm-3" id="obj">
             <h5>Banked Points</h5>
             <ul class="list-group" id="banked_points">
                 <li class="list-group-item" id="bank_name">Player: 400</li>
-                <li class="list-group-item">AI: 250</li>
+                <li class="list-group-item" id="ai_bank_name">AI: 250</li>
             </ul>
         </div>
     </div>
+
+    <!-- HORISONTAL LIST CONTAINING ROLLED DICE -->
     <div class="row justify-content-center" style="margin-top: 5rem">
         <ul class="list-group list-group-horizontal" id="dice_list"></ul>
     </div>
+
+    <!-- ROLL AND BANK BUTTONS -->
     <div class="row align-items-end justify-content-between" style="margin-top: 5rem">
         <div class="col-sm-2" id="obj">
             <button id="roll_button" class="btn btn-light btn-lg">Roll</button>

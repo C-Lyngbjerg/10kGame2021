@@ -1,6 +1,6 @@
 {
   "name": "10kgame2021",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "description": "Exam project for course NodeJS 2021 at KEA",
   "main": "app.js",
   "scripts": {
