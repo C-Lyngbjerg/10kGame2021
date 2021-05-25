@@ -86,12 +86,8 @@ router.post('/game/calculate', (req, res) => {
 });
 
 // TODO: endturn() reset diceLeft
-// NOTE: here or in play.js?
-// here but some functionality in play.js
-router.post('/game/end-turn', (req, res) => {
-    const points = req.body.points;
-    if (points == 0) {
-    }
+router.get('/game/end-turn', (req, res) => {
+    
 });
 
 // NOTE: needs input validation
@@ -131,8 +127,6 @@ function calculatePoints(data) {
         turnInfo.diceLeft = 6;
     }
 
-    // console.log('diceChosen: ', diceChosen);
-    // console.log('score: ', score);
     // clears count value at the end for next call
     diceChosen.map((die) => {
         die.count = 0;

@@ -23,10 +23,14 @@ const diceIconArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'];
 const titleName = $('#title_name');
 const tempName = $('#temp_name');
 const bankName = $('#bank_name');
+
 const aiTempName = $('#ai_temp_name');
 const aiBankName = $('#ai_bank_name');
+
 const status_message = $('#status_message');
 const diceList = $('#dice_list');
+const rollButton = $('#roll_button');
+const bankButton = $('#bank_button');
 
 // -------------------------- DOCUMENT READY --------------------------
 $(document).ready(async () => {
@@ -62,34 +66,16 @@ $('#roll_button').click(function () {
     4. end turn
 */
 $('#bank_button').click(function () {
-    // Add to banked points
-    user.bankPoints += user.tempPoints;
-    
-    // clear temporary points
-    user.tempPoints = 0;
-    updateDisplay();
-
-    // temporary fix until 
-    status_message.text('You have banked your points. \nEnding Turn');
-    // call endturn method with truthy voluntary 
-    // endTurn(true);
+    endTurn(true);
 });
 
-/* -------------------------- FUNCTIONS -------------------------- */
+/* -------------------------- FUNCTIONS -------------------------- 
+    - Functions that are mostly just a call to a router are at the top of this segment 
+    and follow the naming convention 'get<noun>()'.
+    - Regular functions below that segment and can contain calls to routers, but have most of the logic within play.js.
+*/
 
-function chosenDiceFromCheckBoxes() {
-    tempArray = validDiceArray
-        .map((die) => {
-            if ($('#cb_' + die.name).is(':checked')) {
-                return die.value; // NOTE: returns just the number value
-            } else {
-                return null;
-            }
-        })
-        .filter((die) => die !== null);
-    return tempArray;
-}
-
+// ------------ GET FUNCTIONS ------------
 // TODO: fix ajax style to match calculatePoints()
 function getDiceRolls() {
     $.ajax({
@@ -110,10 +96,7 @@ function getDiceRolls() {
                     }
                 });
             } else {
-                noValidChoiceFound();
-                // TODO: endTurn();
                 endTurn(false);
-                // NOTE: show or nah the dice even though turn ends?
             }
             console.log('getDiceRolls diceArray: ', diceArray);
         },
@@ -134,39 +117,81 @@ function getPointsCalculation() {
     });
 }
 
-// NOTE: empty function
-function addToPoints() {}
-
-// NOTE: WIP
-// trying to make it general to both in- and voluntary ending of turns
-function endTurn(voluntary) {
-    const points = 0;
-    if (voluntary) {
-        points = user.tempPoints;
-        user.bankPoints += user.tempPoints;
-    } else {
-        user.tempPoints = 0;
-    }
-    $.ajax({
+// requests and then populates the user constant with req.session info from /auth/
+async function getUser() {
+    await $.ajax({
         method: 'POST',
-        url: '/game/end-turn',
+        data: {}, //JSON.stringify(user),
         headers: { 'Content-type': 'application/json' },
-        data: JSON.stringify({ points }),
-        success: function (data) {
-            /* 
-            TODO : 
-            handle AI turn in game.js
-            how to handle in- or voluntary end turn differences
-             */
+        url: '/auth/get-user',
+        success: (data) => {
+            console.log('getUser: ', data);
+            user = {
+                u_id: data.u_id,
+                email: data.email,
+                u_name: data.user,
+                mmr: data.mmr,
+                tempPoints: user.tempPoints,
+                bankPoints: user.tempPoints,
+            };
         },
     });
 }
 
-// NOTE: should call endTurn(); when ready
-function noValidChoiceFound() {
-    status_message.text('No valid choice rolled. Your turn has ended');
-    // TODO: Call endTurn();
+// ------------ REGULAR FUNCTIONS ------------
+function chosenDiceFromCheckBoxes() {
+    tempArray = validDiceArray
+        .map((die) => {
+            if ($('#cb_' + die.name).is(':checked')) {
+                return die.value; // NOTE: returns just the number value
+            } else {
+                return null;
+            }
+        })
+        .filter((die) => die !== null);
+    return tempArray;
 }
+
+// NOTE: WIP
+// trying to make it general to both in- and voluntary ending of turns
+function endTurn(voluntary) {
+    const voluntaryBoolean = voluntary;
+
+    //  check if voluntary end of turn - if truthy: move points from temp to banked
+    if (voluntaryBoolean) {
+        user.bankPoints += user.tempPoints;
+        user.tempPoints = 0;
+        status_message.text('You have banked your points. \nEnding turn. \nAI is now rolling');
+    } else {
+        // if false: reset temp points (bad roll)
+        status_message.text('No valid dice rolled. \nEnding turn. \nAI is now rolling');
+        user.tempPoints = 0;
+    }
+
+    // clears front-end and disables buttons while AI turn in running
+
+    diceList.empty();
+    updateDisplay();
+    rollButton.prop('disabled', true);
+    bankButton.prop('disabled', true);
+    // NOTE: disable buttons until AI turn finishes
+
+    // $.ajax({
+    //     method: 'POST',
+    //     url: '/game/end-turn',
+    //     headers: { 'Content-type': 'application/json' },
+    //     data: JSON.stringify({ turnInfo }),
+    //     success: function (data) {
+    //         turnInfo = data.turnInfo;
+    //         updateDisplay();
+
+    //         rollButton.prop('disabled', false);
+    //         bankButton.prop('disabled', false);
+    //     },
+    // });
+}
+
+function beginNewTurn() {}
 
 // Fills the diceList <ul> in play.html - is called in map function to populate full list
 function populateDiceList(die, diceList) {
@@ -200,32 +225,20 @@ function checkValuesRolled(data) {
     }
 }
 
-// requests and then populates the user constant with req.session info from /auth/
-async function getUser() {
-    await $.ajax({
-        method: 'POST',
-        data: {}, //JSON.stringify(user),
-        headers: { 'Content-type': 'application/json' },
-        url: '/auth/get-user',
-        success: (data) => {
-            console.log('getUser: ', data);
-            user = {
-                u_id: data.u_id,
-                email: data.email,
-                u_name: data.user,
-                mmr: data.mmr,
-                tempPoints: user.tempPoints,
-                bankPoints: user.tempPoints,
-            };
-        },
-    });
-}
-
 // updates the displayed names and points values
 function updateDisplay() {
     titleName.text(user.u_name + ' is playing vs AI');
     tempName.text(user.u_name + ': ' + user.tempPoints);
     bankName.text(user.u_name + ': ' + user.bankPoints);
-    aiTempName.text('AI : ' + turnInfo.aiTempPoints);
-    aiBankName.text('AI : ' + turnInfo.aiBankPoints);
+    aiTempName.text('AI: ' + turnInfo.aiTempPoints);
+    aiBankName.text('AI: ' + turnInfo.aiBankPoints);
 }
+
+// ajax get method
+/* $.ajax({
+        type: 'GET',
+        url: '/game/end-turn',
+        success: (data) => {
+            // do something
+        }
+    }); */
