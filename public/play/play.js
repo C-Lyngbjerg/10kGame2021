@@ -143,3 +143,20 @@ function getUser() {
         },
     });
 }
+// updates the displayed names and points values
+function updateDisplay() {
+    titleName.text(user.u_name + ' is playing vs AI'); 
+    tempName.text(user.u_name + ': ' + user.tempPoints);
+    bankName.text(user.u_name + ': ' + user.bankPoints);
+    aiTempName.text('AI: ' + turnInfo.aiTempPoints);
+    aiBankName.text('AI: ' + turnInfo.aiBankPoints);
+}
+
+// ajax get method
+/* $.ajax({
+        type: 'GET',
+        url: '/game/end-turn',
+        success: (data) => {
+            // do something
+        }
+    }); */
