@@ -1,5 +1,4 @@
 <div class="container-fluid px-md-5">
-
     <!-- <NAME> IS PLAYING VS AI -->
     <div class="row justify-content-md-center">
         <div class="col-md-auto" id="obj">
@@ -17,11 +16,18 @@
             </ul>
         </div>
         <div class="col-sm-4" id="obj">
-            <ul class="list-group pt-md-5">
-                <li class="list-group-item">
-                    <h5 style="text-align: center" id="status_message">Your turn</h5>
-                </li>
-            </ul>
+            <div class="row justify-content-center" style="margin-bottom: 2rem">
+                <ul class="list-group pt-md-5">
+                    <li class="list-group-item">
+                        <h5 style="text-align: center" id="status_message">Your turn</h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="row justify-content-center">
+                <button id="ready_button" class="btn btn-light btn-lg" >
+                    Ready
+                </button>
+            </div>
         </div>
         <div class="col-sm-3" id="obj">
             <h5>Banked Points</h5>

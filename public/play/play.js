@@ -29,13 +29,19 @@ const aiBankName = $('#ai_bank_name');
 
 const status_message = $('#status_message');
 const diceList = $('#dice_list');
+
 const rollButton = $('#roll_button');
 const bankButton = $('#bank_button');
+const readyButton = $('#ready_button');
 
 // -------------------------- DOCUMENT READY --------------------------
 $(document).ready(async () => {
     // On load retrieves user information from /game/get-user from session information
     await getUser();
+
+    // hides the ready button until used in endturn();
+    readyButton.hide();
+
     // Sets name of player to actual player username
     updateDisplay();
 
@@ -46,12 +52,12 @@ $(document).ready(async () => {
 /*  -------------------------- ROLL_BUTTON -------------------------- 
     On click for roll button
 */
-$('#roll_button').click(function () {
+$('#roll_button').click(async function () {
     // 1. Populate chosenDice Array
     turnInfo.chosenDice = chosenDiceFromCheckBoxes();
 
     // 2. Calculate points for chosen dice and add to temporary points
-    getPointsCalculation();
+    await getPointsCalculation();
 
     // 3. Retrieve new dice rolls from game.js
     validDiceArray = [];
@@ -59,16 +65,25 @@ $('#roll_button').click(function () {
 });
 
 /* -------------------------- BANK_BUTTON -------------------------- 
-    On click for bank button
-    1. get points from temporary points
-    2. add to banked points
-    3. clear temporary points
-    4. end turn
+NOTE: add getPointsCalculation(); to bank button so you dont choose, roll and then bank.
+Should be choose and then bank or roll.
 */
-$('#bank_button').click(function () {
+$('#bank_button').click(async function () {
+    // 1. Populate chosenDice Array
+    turnInfo.chosenDice = chosenDiceFromCheckBoxes();
+
+    // 2. Calculate points for chosen dice and add to temporary points
+    await getPointsCalculation();
+
+    // 3. Changes UI to inactive, handles temp points and starts AI turn from game.js
     endTurn(true);
 });
 
+/* -------------------------- BANK_BUTTON --------------------------
+ */
+$('#ready_button').click(function () {
+    beginNewTurn();
+});
 /* -------------------------- FUNCTIONS -------------------------- 
     - Functions that are mostly just a call to a router are at the top of this segment 
     and follow the naming convention 'get<noun>()'.
@@ -80,12 +95,10 @@ $('#bank_button').click(function () {
 function getDiceRolls() {
     $.ajax({
         method: 'POST',
-        data: {}, //JSON.stringify(user),
+        data: JSON.stringify({ turnInfo }), 
         headers: { 'Content-type': 'application/json' },
         url: '/game/get-dice-rolls',
         success: function (data) {
-            console.log('getDiceRolls data : ', data);
-
             diceList.empty();
             if (checkValuesRolled(data)) {
                 // Truthy if values rolled contain >= 1 valid choice
@@ -93,18 +106,19 @@ function getDiceRolls() {
                     if (die.value !== -1) {
                         // -1 means disregard die
                         return populateDiceList(die, diceList);
+                    } else {
+                        return die;
                     }
                 });
             } else {
                 endTurn(false);
             }
-            console.log('getDiceRolls diceArray: ', diceArray);
         },
     });
 }
 
-function getPointsCalculation() {
-    $.ajax({
+async function getPointsCalculation() {
+    await $.ajax({
         method: 'POST',
         url: '/game/calculate',
         headers: { 'Content-type': 'application/json' },
@@ -140,70 +154,74 @@ async function getUser() {
 
 // ------------ REGULAR FUNCTIONS ------------
 function chosenDiceFromCheckBoxes() {
-    tempArray = validDiceArray
-        .map((die) => {
-            if ($('#cb_' + die.name).is(':checked')) {
-                return die.value; // NOTE: returns just the number value
-            } else {
-                return null;
-            }
-        })
-        .filter((die) => die !== null);
+    tempArray = [];
+    validDiceArray.map((die) => {
+        if ($('#cb_' + die.name).is(':checked')) {
+            tempArray.push(die.value); // NOTE: returns just the number value
+        }
+    });
+    console.log('chosenDiceFromCheckBoxes', tempArray);
+    validDiceArray = [];
     return tempArray;
 }
 
 // NOTE: WIP
 // trying to make it general to both in- and voluntary ending of turns
 function endTurn(voluntary) {
+    console.log('endturn: ', turnInfo);
     const voluntaryBoolean = voluntary;
-
+    const endTurnMessage = '. \nEnding turn. \nAI is now rolling. \nPress ready for next turn';
     //  check if voluntary end of turn - if truthy: move points from temp to banked
     if (voluntaryBoolean) {
         user.bankPoints += user.tempPoints;
         user.tempPoints = 0;
-        status_message.text('You have banked your points. \nEnding turn. \nAI is now rolling');
+        status_message.text('You have banked your points' + endTurnMessage);
     } else {
         // if false: reset temp points (bad roll)
-        status_message.text('No valid dice rolled. \nEnding turn. \nAI is now rolling');
+        status_message.text('No valid dice rolled' + endTurnMessage);
         user.tempPoints = 0;
     }
 
     // clears front-end and disables buttons while AI turn in running
-
     diceList.empty();
     updateDisplay();
     rollButton.prop('disabled', true);
     bankButton.prop('disabled', true);
-    // NOTE: disable buttons until AI turn finishes
 
-    // $.ajax({
-    //     method: 'POST',
-    //     url: '/game/end-turn',
-    //     headers: { 'Content-type': 'application/json' },
-    //     data: JSON.stringify({ turnInfo }),
-    //     success: function (data) {
-    //         turnInfo = data.turnInfo;
-    //         updateDisplay();
-
-    //         rollButton.prop('disabled', false);
-    //         bankButton.prop('disabled', false);
-    //     },
-    // });
+    $.ajax({
+        method: 'POST',
+        url: '/game/end-turn',
+        headers: { 'Content-type': 'application/json' },
+        data: JSON.stringify({ turnInfo }),
+        success: function (data) {
+            // updates AI score and shows ready button
+            turnInfo = data.turnInfo;
+            turnInfo.diceLeft = 6;
+            turnInfo.diceChosen = [];
+            updateDisplay();
+            readyButton.show();
+        },
+    });
 }
 
-function beginNewTurn() {}
+function beginNewTurn() {
+    readyButton.hide();
+    console.log('beginNewTurn: ', turnInfo);
+    getDiceRolls();
+    rollButton.prop('disabled', false);
+    bankButton.prop('disabled', false);
+}
 
 // Fills the diceList <ul> in play.html - is called in map function to populate full list
 function populateDiceList(die, diceList) {
     const diceListItem = $(`<li class="list-group-item px-md-5" id="${die.name}">`);
 
     const rowOne = $(`<div class= "row"></div> `);
-    // rowOne.append($('<h2></h2>').text(die.value));
     rowOne.append($(`<i class="fas fa-dice-${diceIconArray[die.value]} fa-3x"></i>`));
     diceListItem.append(rowOne);
 
     const rowTwo = $(`<div class= "row justify-content-center"></div> `);
-    rowTwo.append($(`<input type="checkbox"id="cb_${die.name}">`));
+    rowTwo.append($(`<input type= "checkbox" id="cb_${die.name}">`));
     validDiceArray.push(die);
     diceListItem.append(rowTwo);
 
@@ -233,12 +251,3 @@ function updateDisplay() {
     aiTempName.text('AI: ' + turnInfo.aiTempPoints);
     aiBankName.text('AI: ' + turnInfo.aiBankPoints);
 }
-
-// ajax get method
-/* $.ajax({
-        type: 'GET',
-        url: '/game/end-turn',
-        success: (data) => {
-            // do something
-        }
-    }); */
