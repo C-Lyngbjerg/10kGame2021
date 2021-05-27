@@ -8,7 +8,7 @@ const status_message = $('#status_message');
 
 $(document).ready(function () {
     // On load change name of player to actual player username
-    getUser();
+    getUser(); 
     titleName.text(user.user + ' is playing vs AI');
     tempName.text(user.user + ': 100');
     bankName.text(user.user + ': 0');
