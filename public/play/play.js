@@ -104,7 +104,7 @@ function populateDiceList(die, diceList) {
     // rowOne.append($('<h2></h2>').text(die.value));
     rowOne.append($(`<i class="fas fa-dice-${diceIconArray[die.value]} fa-3x"></i>`));
     diceListItem.append(rowOne);
-
+ 
     const rowTwo = $(`<div class= "row justify-content-center"></div> `);
     rowTwo.append($(`<input type="checkbox"id="cb_${die.name}">`));
     diceListItem.append(rowTwo);

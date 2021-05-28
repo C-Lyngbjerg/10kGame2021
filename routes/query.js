@@ -52,6 +52,16 @@ router.get('/api/read-all', (req, res) => {
         }
     });
 });
+// ---------- Gets users ordered by their MMR, for easier work with Leaderboard feature ------- //
+router.get('/api/read-all-leaderboard', (req, res) => {
+    con.query('SELECT * FROM `users` ORDER BY mmr', (err, result, fields) => {
+        if (!err) {
+            res.send(result);
+        } else {
+            console.log(err);
+        }
+    });
+});
 
 // Read by ID
 router.get('/api/read-by-id/:id', (req, res) => {
@@ -97,6 +107,7 @@ router.delete('/api/delete-user/:id', (req, res) => {
         }
     });
 });
+
 
 // ------------------------- NODEMAILER ----------------------------- //
 async function main(user) {
