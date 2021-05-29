@@ -67,6 +67,7 @@ let diceChosen = [
         multiplier: 100,
     },
 ];
+
 router.post('/game/get-dice-rolls', (req, res) => {
     turnInfo = req.body.turnInfo;
     rollDice(turnInfo.diceLeft); // rolls the new dice
@@ -82,7 +83,6 @@ router.post('/game/calculate', (req, res) => {
     }
 
     user.tempPoints += calculatePoints(turnInfo.chosenDice); // calculates the points and returns score
-    console.log('diceLeft4: ',turnInfo.diceLeft);
     res.send({ turnInfo: turnInfo, user: user });
 });
 
@@ -96,7 +96,6 @@ router.post('/game/end-turn', (req, res) => {
 // NOTE: needs input validation
 function calculatePoints(diceForPointCalculation) {
     let score = 0;
-    console.log('diceForPointCalculation: ',diceForPointCalculation);
 
     // simpleDie represents the number value of each die chosen
     // is used to increase the count value which is used in the next .map function to calculate the points
@@ -118,19 +117,16 @@ function calculatePoints(diceForPointCalculation) {
             } else {
                 score += die.name * die.multiplier;
             }
-            console.log('score: ',score);
         }
     });
-    console.log('diceLeft: ',turnInfo.diceLeft);
+
     // remove # dice left equal to count of dice chosen
     turnInfo.diceLeft -= diceForPointCalculation.length;
-    console.log('diceLeft2: ',turnInfo.diceLeft);
 
     // if all dice are used, then reset diceLeft to 6
     if (turnInfo.diceLeft === 0) {
         turnInfo.diceLeft = 6;
     }
-    console.log('diceLeft3: ',turnInfo.diceLeft);
 
     // clears count value at the end for next call
     diceChosen.map((die) => {
