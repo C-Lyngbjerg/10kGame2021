@@ -1,4 +1,4 @@
-<div class="container-fluid px-md-5">
+<div class="row px-md-5">
     <!-- <NAME> IS PLAYING VS AI -->
     <div class="row justify-content-md-center">
         <div class="col-md-auto" id="obj">
@@ -10,8 +10,8 @@
     <div class="row justify-content-between pt-md-5">
         <div class="col-sm-3" id="obj">
             <h5>Temporary Points</h5>
-            <ul class="list-group" id="temp_points">
-                <li class="list-group-item" id="temp_name">Player: 100</li>
+            <ul class="list-group " id="temp_points">
+                <li class="list-group-item " id="temp_name">Player: 100</li>
                 <li class="list-group-item" id="ai_temp_name">AI: 0</li>
             </ul>
         </div>
@@ -32,22 +32,20 @@
         <div class="col-sm-3" id="obj">
             <h5>Banked Points</h5>
             <ul class="list-group" id="banked_points">
-                <li class="list-group-item" id="bank_name">Player: 400</li>
-                <li class="list-group-item" id="ai_bank_name">AI: 250</li>
+                <li class="list-group-item" id="bank_name"></li>
+                <li class="list-group-item" id="ai_bank_name"></li>
             </ul>
         </div>
     </div>
 
-    <!-- HORISONTAL LIST CONTAINING ROLLED DICE -->
-    <div class="row justify-content-center" style="margin-top: 5rem">
-        <ul class="list-group list-group-horizontal" id="dice_list"></ul>
-    </div>
-
-    <!-- ROLL AND BANK BUTTONS -->
-    <div class="row align-items-end justify-content-between" style="margin-top: 5rem">
+    <!-- HORISONTAL LIST CONTAINING ROLLED DICE, ROLL AND BANK BUTTONS -->
+    <div class="row justify-content-between" style="margin-top: 5rem">
         <div class="col-sm-2" id="obj">
             <button id="roll_button" class="btn btn-light btn-lg">Roll</button>
         </div>
+        
+        <ul class="col-sm-8 justify-content-center list-group list-group-horizontal" id="dice_list"></ul>
+        
         <div class="col-sm-2" id="obj">
             <button id="bank_button" class="btn btn-light btn-lg">Bank</button>
         </div>

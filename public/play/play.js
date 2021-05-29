@@ -216,7 +216,7 @@ function beginNewTurn() {
 
 // Fills the diceList <ul> in play.html - is called in map function to populate full list
 function populateDiceList(die, diceList) {
-    const diceListItem = $(`<li class="list-group-item px-md-5" id="${die.name}">`);
+    const diceListItem = $(`<li class="list-group-item px-md-5 border-0" id="${die.name}">`);
 
     const rowOne = $(`<div class= "row"></div> `);
     rowOne.append($(`<i class="fas fa-dice-${diceIconArray[die.value]} fa-3x"></i>`));

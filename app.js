@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const fs = require('fs');
-const con = require('./util/connection.js');
 const dotenv = require('dotenv').config();
 const session = require('express-session'); // npm i express-session
 
@@ -88,7 +88,7 @@ app.get('/play', (req, res) => {
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, (error) => {
+server.listen(PORT, (error) => {
     if (error) {
         console.log('An error has occured: ', error);
     } else {
