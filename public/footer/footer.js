@@ -3,12 +3,22 @@ $(document).ready(() => {
     $("#footer-copyright").text('Copyright © ' + new Date().getFullYear());
 });
 
-const messageText = $('#message')
+const messageText = $('#message');
 const socket = io();
+const container = $('#container');
 $('#send_button').click(() => {
     console.log(user.u_name);
-    // socket.emit('message', {user: user.u_name,chat: chat});
-});    
+    console.log(messageText.val());
+    socket.emit('message', {user: user.u_name,chat: messageText.val()});
+});  
+
+socket.on("response", (data) => {
+    console.log(data.response);
+    const messageP = $(`<p></p>`).text(data.response);
+    container.append(messageP);
+    messageText.val("");
+
+});
 // const form = $('form');
 //     // form.addEventListener('submit', function(e) {
 //     //     e.preventDefault();
@@ -20,11 +30,4 @@ $('#send_button').click(() => {
 //     //     inputC.value = '';
 //     // });
 
-//     socket.on("response", (data) => {
-//             console.log(data);
-
-//             const messageP = document.createElement("p")
-//             messageP.innerText = data.user+": "+data.chat; // dont use innerHTML because they can inject html bad stuff through it cross site injection
-//             container.appendChild(messageP);
-//         //     // document.body.style.backgroundColor = data.color;
-//     });
+//     

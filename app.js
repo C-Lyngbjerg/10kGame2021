@@ -5,6 +5,8 @@ const io = require("socket.io")(server);
 const fs = require('fs');
 const dotenv = require('dotenv').config();
 const session = require('express-session'); // npm i express-session
+const cors = require('cors');
+let user = {};
 
 app.use(
     session({
@@ -52,6 +54,12 @@ function setNavAuthState() {
 
 app.get('/', (req, res) => {
     if (req.session.isAuth) {
+        user = {
+            user: req.session.u_name,
+            email: req.session.email,
+            u_id: req.session.u_id,
+            mmr: req.session.mmr,
+        };
         res.send(setNavAuthState() + frontPage + footer);
     } else {
         res.send(header + frontPage + footer);
@@ -68,7 +76,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', cors(), (req, res) => {
     res.send(header + loginPage + footer);
 });
 
@@ -96,6 +104,15 @@ server.listen(PORT, (error) => {
     }
 });
 
+/* Chat */
+io.on("connection", (socket) => {
+    console.log("A socket connected with id: ", socket.id);
+    socket.on("message", (data) => {
+        console.log(`${data.user}: ${data.chat}`);
+        chatRes = {response:`${data.user}: ${data.chat}`}
+        io.emit('response', chatRes); // broadcast emit user: chat
+    });
+});
 /* 
 TODO:
 - GDPR
