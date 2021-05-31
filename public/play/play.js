@@ -221,7 +221,7 @@ function populateDiceList(die, diceList) {
     const rowOne = $(`<div class= "row"></div> `);
     rowOne.append($(`<i class="fas fa-dice-${diceIconArray[die.value]} fa-3x"></i>`));
     diceListItem.append(rowOne);
-
+ 
     const rowTwo = $(`<div class= "row justify-content-center"></div> `);
     rowTwo.append($(`<input type= "checkbox" id="cb_${die.name}">`));
     validDiceArray.push(die);
@@ -245,11 +245,15 @@ function checkValuesRolled(data) {
     }
 }
 
+
+
 // updates the displayed names and points values
 function updateDisplay() {
     titleName.text(user.u_name + ' is playing vs AI');
+
     tempName.text(user.u_name + ': ' + user.tempPoints);
     bankName.text(user.u_name + ': ' + user.bankPoints);
     aiTempName.text('AI: ' + turnInfo.aiTempPoints);
     aiBankName.text('AI: ' + turnInfo.aiBankPoints);
 }
+
