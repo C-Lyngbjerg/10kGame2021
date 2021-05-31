@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
-
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const fs = require('fs');
-const con = require('./util/connection.js');
 const dotenv = require('dotenv').config();
 const session = require('express-session'); // npm i express-session
+const cors = require('cors');
+let user = {};
 
 app.use(
     session({
@@ -27,6 +29,7 @@ const footer = fs.readFileSync(pubDir + '/footer/footer.html', 'utf-8');
 const frontPage = fs.readFileSync(pubDir + '/frontpage/frontpage.html', 'utf-8');
 const loginPage = fs.readFileSync(pubDir + '/login/login.html', 'utf-8');
 const playPage = fs.readFileSync(pubDir + '/play/play.html', 'utf-8');
+const chatPage = fs.readFileSync(pubDir + '/chat/chat.html', 'utf-8');
 
 const queryRouter = require('./routes/query.js');
 const authRouter = require('./routes/auth.js');
@@ -50,6 +53,15 @@ function setNavAuthState() {
     return header.replace('href="/login"> Log In</a>', 'href="/logout"> Log Out</a>');
 }
 
+app.get('/login', cors(), (req, res) => {
+    res.send(header + loginPage + footer);
+});
+
+app.get('/*', (req, res, next) => {
+    if (!req.session.isAuth) return res.redirect('/login');
+    next();
+});
+
 app.get('/', (req, res) => {
     if (req.session.isAuth) {
         res.send(setNavAuthState() + frontPage + footer);
@@ -68,8 +80,8 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/login', (req, res) => {
-    res.send(header + loginPage + footer);
+app.get('/chat', (req,res) => {
+    res.send(header + chatPage + footer);
 });
 
 app.get('/play', (req, res) => {
@@ -87,8 +99,13 @@ app.get('/play', (req, res) => {
     */
 });
 
+app.get('/*', (req, res) => {
+    // implement errorPage
+    // res.send(header + errorPage + footer);
+});
+
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, (error) => {
+server.listen(PORT, (error) => {
     if (error) {
         console.log('An error has occured: ', error);
     } else {
@@ -96,25 +113,12 @@ app.listen(PORT, (error) => {
     }
 });
 
-/* 
-TODO:
-- GDPR
-    - checkbox cookies at log in / sign up
-    - user deletability (?)
-- User profile
-    - Delete user
-    - Update stuff
-- Leaderboard
-- Contact
-- Mail on signup
-- Rules page
-- Chat
-- VS AI
-    - Basically all game logic
-- VS Player
-    - 'Matchmaking'
-        - stack
-    - Everything
-    - Sockets
-
-*/
+/* Chat */
+io.on('connection', (socket) => {
+    console.log('A socket connected with id: ', socket.id);
+    socket.on('message', (data) => {
+        console.log(`${data.user}: ${data.chat}`);
+        chatRes = { response: `${data.user}: ${data.chat}` };
+        io.emit('response', chatRes); // broadcast emit user: chat
+    });
+});
