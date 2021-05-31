@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
     $('#profileHeadName').text('Global leaderboard');
     
@@ -25,7 +23,7 @@ function getAllUsers() {
             console.log(result[0]);
         },
     });
-};
+}; 
 // --- Creates Leaderboard table and fill it with users, with the highest MMR at the top --- //
 function testTable(result){
     var c, r, t, div;
