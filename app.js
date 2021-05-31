@@ -7,7 +7,7 @@ const dotenv = require('dotenv').config();
 const session = require('express-session'); // npm i express-session
 const cors = require('cors');
 let user = {};
-
+app.use(cors());
 app.use(
     session({
         secret: process.env.SECRET, // put in .env
