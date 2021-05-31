@@ -116,11 +116,11 @@ app.get("/rules", (req,res) => {
     res.send(header + rulepage + footer);
 });
 
-app.get('/*', (req, res) => {
-    // implement errorPage
-    // res.send(header + errorPage + footer);
+// app.get('/*', (req, res) => {
+//     // implement errorPage
+//     // res.send(header + errorPage + footer);
 
-});
+// });
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, (error) => {
