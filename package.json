@@ -1,6 +1,6 @@
 {
   "name": "10kgame2021",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "description": "Exam project for course NodeJS 2021 at KEA",
   "main": "app.js",
   "scripts": {
@@ -25,11 +25,13 @@
   "homepage": "https://github.com/C-Lyngbjerg/10kGame2021#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.6.1"
+    "socket.io": "^4.1.2"
   }
 }
