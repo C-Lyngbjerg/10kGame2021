@@ -12,6 +12,7 @@ $(document).ready(async () => {
 $('#send_button').click(() => {
     console.log(user.u_name);
     console.log(messageText.val());
+    messageText.val("");
     socket.emit('message', {user: user.u_name,chat: messageText.val()});
 });  
 
@@ -19,7 +20,7 @@ socket.on("response", (data) => {
     console.log(data.response);
     const messageP = $(`<p></p>`).text(data.response);
     container.append(messageP);
-    messageText.val("");
+    
 
 });
 
