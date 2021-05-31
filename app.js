@@ -36,7 +36,6 @@ const leaderboard = fs.readFileSync(pubDir + '/leaderboard/leaderboard.html','ut
 const rulepage = fs.readFileSync(pubDir + '/rules/rules.html','utf-8');
 const chatPage = fs.readFileSync(pubDir + '/chat/chat.html', 'utf-8');
 
-
 const queryRouter = require('./routes/query.js');
 const authRouter = require('./routes/auth.js');
 const gameRouter = require('./routes/game.js');
