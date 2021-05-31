@@ -1,18 +1,18 @@
-$(document).ready(function() {
+$(document).ready(async function() {
     $('#profileHeadName').text('Global leaderboard');
     
-    getAllUsers();  
-    console.log('test' + result);
-    console.log(result[0]);
+    await getAllUsers();  
+    // console.log('test' + result);
+    // console.log(result[0]);
 
-    testTable(result);
+    // testTable(result);
     
 });
 
-function getAllUsers() {
+async function getAllUsers() {
     $.ajax({
         type: 'GET',
-        async: false,
+        // async: false,
         data: {}, //JSON.stringify(user),
         contentType: 'application/json',
         url: '/api/read-all-leaderboard',
@@ -21,6 +21,7 @@ function getAllUsers() {
             console.log(data);
             result = data;
             console.log(result[0]);
+            testTable(result);
         },
     });
 }; 
