@@ -114,6 +114,7 @@ app.get("/leaderboard", (req,res) => {
 
 app.get("/rules", (req,res) => {
     res.send(header + rulepage + footer);
+});
 
 app.get('/*', (req, res) => {
     // implement errorPage
