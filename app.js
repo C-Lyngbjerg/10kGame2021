@@ -32,7 +32,7 @@ const frontPage = fs.readFileSync(pubDir + '/frontpage/frontpage.html', 'utf-8')
 const loginPage = fs.readFileSync(pubDir + '/login/login.html', 'utf-8');
 const playPage = fs.readFileSync(pubDir + '/play/play.html', 'utf-8');
 const profilepage = fs.readFileSync(pubDir + '/profilepage/profile.html','utf-8');
-const leaderboard = fs.readFileSync(pubDir + '/leaderboard/leaderboard.html','utf-8');
+// const leaderboard = fs.readFileSync(pubDir + '/leaderboard/leaderboard.html','utf-8');
 const rulepage = fs.readFileSync(pubDir + '/rules/rules.html','utf-8');
 const chatPage = fs.readFileSync(pubDir + '/chat/chat.html', 'utf-8');
 
@@ -109,9 +109,9 @@ app.get("/profile", (req,res) => {
     res.send(header + profilepage + footer);
 });
 
-app.get("/leaderboard", (req,res) => {
-    res.send(header + leaderboard + footer);
-});
+// app.get("/leaderboard", (req,res) => {
+//     res.send(header + leaderboard + footer);
+// });
 
 app.get("/rules", (req,res) => {
     res.send(header + rulepage + footer);
