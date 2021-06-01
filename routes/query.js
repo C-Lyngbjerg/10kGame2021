@@ -3,6 +3,7 @@ const con = require('../util/connection.js');
 const bcrypt = require('../util/password.js');
 const nodemailer = require('nodemailer');
 const env = require('dotenv');
+const { prototype } = require('nodemailer/lib/dkim');
 
 
 const saltRounds = 12;
@@ -127,7 +128,7 @@ async function main(user) {
     let testAccount = await nodemailer.createTestAccount();
   
     // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
+    /*let transporter = nodemailer.createTransport({
       host: "imap.gmail.com",
       port: 587,
       secure: false, // true for 465, false for other ports
@@ -138,7 +139,15 @@ async function main(user) {
       tls:{
         rejectUnauthorized:false
         }
+    });*/
+    const transporter = nodemailer.createTransport({
+    service:'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER, // generated ethereal user
+        pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+      },
     });
+
   
     // send mail with defined transport object
     let info = await transporter.sendMail({
