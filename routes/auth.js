@@ -59,7 +59,7 @@ router.get('/auth/logout', (req, res) => {
     });
 });
 
-router.get('/auth/is_auth', (req, res) => {
+router.get('/auth/is_auth',cors(), (req, res) => {
     if (req.session.isAuth) {
         console.log(req.session.isAuth);
         res.redirect('/play');
