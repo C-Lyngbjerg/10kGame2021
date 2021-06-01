@@ -4,9 +4,7 @@ const bcrypt = require('../util/password.js');
 const nodemailer = require('nodemailer');
 const env = require('dotenv');
 
-
 const saltRounds = 12;
-
 
 // ----------------------------- CREATE ----------------------------- //
 // Create User
@@ -18,7 +16,7 @@ router.post('/api/create-user', async (req, res) => {
         mmr: 1000,
         u_password: req.body.u_password,
     };
-    
+
     console.log(user);
     user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
     main(user);
@@ -108,7 +106,6 @@ router.delete('/api/delete-user/:id', (req, res) => {
     });
 });
 
-
 // ------------------------- NODEMAILER ----------------------------- //
 async function main(user) {
     const htmlMessage = `
@@ -122,33 +119,33 @@ async function main(user) {
         </tr>
     </table>
 `;
-    console.log("this: ", user)
+    console.log('this: ', user);
     // Only needed if you don't have a real mail account for testing
     let testAccount = await nodemailer.createTestAccount();
-  
+
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      host: "imap.gmail.com",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER, // generated ethereal user
-        pass: process.env.EMAIL_PASSWORD, // generated ethereal password
-      },
-      tls:{
-        rejectUnauthorized:false
-        }
+        host: 'imap.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: process.env.EMAIL_USER, // generated ethereal user
+            pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+        },
+        tls: {
+            rejectUnauthorized: false,
+        },
     });
-  
+
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"10KGames" <10KG@mail.dk>', // sender address
-      to: user.email, // list of receivers
-      subject: "Welcome", // Subject line
-      text: "Hello world?", // plain text body
-      html: htmlMessage, // html body
+        from: '"10KGames" <10KG@mail.dk>', // sender address
+        to: user.email, // list of receivers
+        subject: 'Welcome', // Subject line
+        text: 'Hello world?', // plain text body
+        html: htmlMessage, // html body
     });
-  }
+}
 
 module.exports = {
     router,
