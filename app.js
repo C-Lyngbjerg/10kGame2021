@@ -8,7 +8,7 @@ const session = require('express-session'); // npm i express-session
 const cors = require('cors');
 let user = {};
 
-app.use(cors());
+// app.use(cors());
 
 app.use(
     session({
@@ -58,7 +58,7 @@ function setNavAuthState() {
     return header.replace('href="/login"> Log In</a>', 'href="/logout"> Log Out</a>');
 }
 
-app.get('/', (req, res) => {
+app.get('/', cors(), (req, res) => {
     if (req.session.isAuth) {
         res.send(setNavAuthState() + frontPage + footer);
     } else {
@@ -75,7 +75,7 @@ app.get('/*', (req, res, next) => {
     next();
 });
 
-app.get('/logout', (req, res) => {
+app.get('/logout', cors(), (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return console.log(err);
@@ -85,11 +85,11 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/chat', (req,res) => {
+app.get('/chat', cors(), (req,res) => {
     res.send(header + chatPage + footer);
 });
 
-app.get('/play', (req, res) => {
+app.get('/play', cors(), (req, res) => {
     res.send(header + playPage + footer);
 
     /* 
@@ -105,15 +105,15 @@ app.get('/play', (req, res) => {
 });
 
 
-app.get("/profile", (req,res) => {
+app.get("/profile", cors(), (req,res) => {
     res.send(header + profilepage + footer);
 });
 
-app.get("/leaderboard", (req,res) => {
+app.get("/leaderboard", cors(), (req,res) => {
     res.send(header + leaderboardpage + footer);
 });
 
-app.get("/rules", (req,res) => {
+app.get("/rules", cors(), (req,res) => {
     res.send(header + rulepage + footer);
 });
 

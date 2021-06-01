@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const con = require('../util/connection.js');
 const bcrypt = require('../util/password.js');
-const cors = require('cors');
+// const cors = require('cors');
 
 // Login
 /*
@@ -59,7 +59,7 @@ router.get('/auth/logout', (req, res) => {
     });
 });
 
-router.get('/auth/is_auth',cors(), (req, res) => {
+router.get('/auth/is_auth', (req, res) => {
     if (req.session.isAuth) {
         console.log(req.session.isAuth);
         res.redirect('/play');
