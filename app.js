@@ -8,7 +8,7 @@ const session = require('express-session'); // npm i express-session
 const cors = require('cors');
 let user = {};
 
-// app.use(cors());
+app.use(cors());
 
 app.use(
     session({
@@ -58,6 +58,14 @@ function setNavAuthState() {
     return header.replace('href="/login"> Log In</a>', 'href="/logout"> Log Out</a>');
 }
 
+app.get('/', (req, res) => {
+    if (req.session.isAuth) {
+        res.send(setNavAuthState() + frontPage + footer);
+    } else {
+        res.send(header + frontPage + footer);
+    }
+});
+
 app.get('/login', cors(), (req, res) => {
     res.send(header + loginPage + footer);
 });
@@ -65,14 +73,6 @@ app.get('/login', cors(), (req, res) => {
 app.get('/*', (req, res, next) => {
     if (!req.session.isAuth) return res.redirect('/login');
     next();
-});
-
-app.get('/', (req, res) => {
-    if (req.session.isAuth) {
-        res.send(setNavAuthState() + frontPage + footer);
-    } else {
-        res.send(header + frontPage + footer);
-    }
 });
 
 app.get('/logout', (req, res) => {
