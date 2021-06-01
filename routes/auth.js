@@ -9,7 +9,7 @@ SELECT WHERE query with prepared statement that creates an async callback to the
 of unhashed password from login attempt and hashed password from db and returns boolean which we can send the 
 login page in future for redirect based on that.
 */
-router.post('/auth/login', (req, res) => {
+router.post('/auth/login', cors(), (req, res) => {
     let user = {
         email: req.body.email,
         u_password: req.body.u_password,
@@ -50,7 +50,7 @@ router.post('/auth/login', (req, res) => {
     });
 });
 
-router.get('/auth/logout', (req, res) => {
+router.get('/auth/logout', cors(), (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return console.log(err);

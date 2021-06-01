@@ -68,7 +68,7 @@ $('#roll_button').click(async function () {
 NOTE: add getPointsCalculation(); to bank button so you dont choose, roll and then bank.
 Should be choose and then bank or roll.
 */
-$('#bank_button').click(async function () {
+$('#bank_button').click(async () =>  {
     // 1. Populate chosenDice Array
     turnInfo.chosenDice = chosenDiceFromCheckBoxes();
 
