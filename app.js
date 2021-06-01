@@ -8,7 +8,7 @@ const session = require('express-session'); // npm i express-session
 const cors = require('cors');
 let user = {};
 
-app.use(cors());
+// app.use(cors());
 
 app.use(
     session({
