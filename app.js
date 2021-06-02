@@ -9,6 +9,7 @@ const session = require('express-session'); // npm i express-session
 const cors = require('cors');
 const helmet = require('helmet');
 
+
 /* ------------------------------ APP.USE ------------------------------ */
 app.use(
     session({
@@ -43,9 +44,11 @@ app.use(
         },
     }),
 );
+
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+
 
 /* ------------------------------ PATH TO PUBLIC ------------------------------ */
 const pubDir = __dirname + '/public';
@@ -89,6 +92,7 @@ function setNavAuthState(isAtProfilePage) {
         return header.replace('href="/login"> Log In</a>', 'href="/profile"> Profile</a>');
     }
 }
+
 
 /* ------------------------------ APP.GET ------------------------------ */
 app.get('/', cors(), (req, res) => {
@@ -144,7 +148,6 @@ app.get('/rules', cors(), (req, res) => {
 
 // });
 
-
 /* ------------------------------ PORT & .LISTEN ------------------------------ */
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, (error) => {
@@ -154,6 +157,7 @@ server.listen(PORT, (error) => {
         console.log('Server is now running on port ', Number(PORT));
     }
 });
+
 
 /* ------------------------------ CHAT ------------------------------ */
 io.on('connection', (socket) => {
