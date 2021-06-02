@@ -56,9 +56,21 @@ function setNavActive(navItem) {
 }
 */
 
-function setNavAuthState() {
-    return header.replace('href="/login"> Log In</a>', 'href="/logout"> Log Out</a>');
+function setNavAuthState(isAtProfilePage) {
+    if(isAtProfilePage){
+        return header.replace('href="/login"> Log In</a>', 'href="/logout"> Log Out</a>');
+    }else{
+        return header.replace('href="/login"> Log In</a>', 'href="/profile"> Profile</a>');
+    }
 }
+
+app.get('/', (req, res) => {
+    if (req.session.isAuth) {
+        res.send(setNavAuthState(false) + frontPage + footer);
+    } else {
+        res.send(header + frontPage + footer);
+    }
+});
 
 app.get('/login', cors(), (req, res) => {
     res.send(header + loginPage + footer);
@@ -67,14 +79,6 @@ app.get('/login', cors(), (req, res) => {
 app.get('/*', (req, res, next) => {
     if (!req.session.isAuth) return res.redirect('/login');
     next();
-});
-
-app.get('/', (req, res) => {
-    if (req.session.isAuth) {
-        res.send(setNavAuthState() + frontPage + footer);
-    } else {
-        res.send(header + frontPage + footer);
-    }
 });
 
 app.get('/logout', (req, res) => {
@@ -88,11 +92,11 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/chat', (req,res) => {
-    res.send(header + chatPage + footer);
+    res.send(setNavAuthState(false) + chatPage + footer);
 });
 
 app.get('/play', (req, res) => {
-    res.send(header + playPage + footer);
+    res.send(setNavAuthState(false) + playPage + footer);
 
     /* 
     disabled for ease of testing as of 21.05.18
@@ -108,15 +112,15 @@ app.get('/play', (req, res) => {
 
 
 app.get("/profile", (req,res) => {
-    res.send(header + profilepage + footer);
+    res.send(setNavAuthState(true) + profilepage + footer);
 });
 
 app.get("/leaderboard", (req,res) => {
-    res.send(header + leaderboardpage + footer);
+    res.send(setNavAuthState(false) + leaderboardpage + footer);
 });
 
 app.get("/rules", (req,res) => {
-    res.send(header + rulepage + footer);
+    res.send(setNavAuthState(false) + rulepage + footer);
 });
 
 // app.get('/*', (req, res) => {

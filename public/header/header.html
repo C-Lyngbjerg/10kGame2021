@@ -13,16 +13,20 @@
     
     <title>10k Game</title>
 </head>
-<body >
-    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<body class="bg-light">
     <script src="../header/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
     
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light justify-content-between">
+    
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light justify-content-between" style="background-color: #eee">
         <!-- Navbar text-->
         <div >
-            <a class="navbar-brand" style="padding-left: 3rem;"href="/">
-                Home
-            </a>
+            <ul id="navLinkList"class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/"style="padding-left: 3rem"> Home</a>
+                </li>
+            </ul>
+           
         </div>
         <div >
             <ul id="navLinkList"class="navbar-nav" style="padding-right: 3rem;">
@@ -36,21 +40,16 @@
                     <a class="nav-item nav-link" href="/rules"> Rules</a> <!--https://en.wikipedia.org/wiki/Dice_10000-->
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-item nav-link" href="/profile">Profile page</a>                    
-                </li>
-                <li class="nav-item active">
                    <a class="nav-item nav-link" href="/chat"> Chat</a>
                 </li>
             </ul>
         </div>
-        <!-- Links -->
-        <div >
+        <div>
             <ul id="navLinkList"class="navbar-nav ms-auto">
-            
-            <li class="nav-item active">
-                <a class="nav-item nav-link" href="/login"> Log In</a>
-            </li>
-        </ul>
+                <li class="nav-item active">
+                    <a class="nav-link" style="padding-right: 3rem" href="/login"> Log In</a>
+                </li>
+            </ul>
         </div>
 
     </nav>
