@@ -15,7 +15,9 @@ app.use(
         secret: process.env.SECRET, // put in .env
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false }, // if HTTPS true otherwise false
+        cookie: { 
+            secure: false,  // if HTTPS true otherwise false
+            maxAge: 86400000 }, 
     }),
 );
 
