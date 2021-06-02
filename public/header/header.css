@@ -1,0 +1,20 @@
+.btn {
+    background-color: #eee;
+}
+
+.navbar {
+    background-color: #eee;
+}
+
+.container-fluid {
+    min-height: calc(100vh - 105px);
+    margin-top: 5rem;
+}
+
+#home_nav {
+    padding-left: 3rem;
+}
+
+#login_nav {
+    padding-right: 3rem;
+}

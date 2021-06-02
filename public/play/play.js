@@ -140,7 +140,6 @@ async function getUser() {
         headers: { 'Content-type': 'application/json' },
         url: '/auth/get-user',
         success: (data) => {
-            console.log('getUser: ', data);
             user = {
                 u_id: data.u_id,
                 email: data.email,
