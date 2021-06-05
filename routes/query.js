@@ -120,9 +120,6 @@ async function main(user) {
     </table>
 `;
     console.log('this: ', user);
-    // Only needed if you don't have a real mail account for testing
-    let testAccount = await nodemailer.createTestAccount();
-
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         host: 'imap.gmail.com',
