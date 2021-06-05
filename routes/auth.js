@@ -2,6 +2,7 @@ const router = require('express').Router();
 const con = require('../util/connection.js');
 const bcrypt = require('../util/password.js');
 const cors = require('cors');
+const { body, validationResult } = require('express-validator');
 
 // Login
 /*
@@ -9,11 +10,21 @@ SELECT WHERE query with prepared statement that creates an async callback to the
 of unhashed password from login attempt and hashed password from db and returns boolean which we can send the 
 login page in future for redirect based on that.
 */
-router.post('/auth/login', cors(), (req, res) => {
+router.post('/auth/login',
+body('email').isEmail().withMessage('Email is not valid. Use format \'xxx@xxx.xxx\''), 
+body('u_password').isLength({min:6}).withMessage('Password is incorrect'),
+    cors(), (req, res) => {
     let user = {
         email: req.body.email,
         u_password: req.body.u_password,
     };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            errors: errors.array()
+        });
+    }
     let loginResult;
     con.query('SELECT * FROM `users` WHERE email = ?', user.email, async (err, result, fields) => {
         if (!err) {

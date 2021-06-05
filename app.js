@@ -64,15 +64,18 @@ const profilepage = fs.readFileSync(pubDir + '/profilepage/profile.html', 'utf-8
 const leaderboardpage = fs.readFileSync(pubDir + '/leaderboardpage/leaderboard.html', 'utf-8');
 const rulepage = fs.readFileSync(pubDir + '/rules/rules.html', 'utf-8');
 const chatPage = fs.readFileSync(pubDir + '/chat/chat.html', 'utf-8');
+const contactPage = fs.readFileSync(pubDir + '/contact/contact.html', 'utf-8');
 
 /* ------------------------------ ROUTES ------------------------------ */
 const queryRouter = require('./routes/query.js');
 const authRouter = require('./routes/auth.js');
 const gameRouter = require('./routes/game.js');
+const mailRoute = require('./routes/mailer.js');
 
 app.use(queryRouter.router);
 app.use(authRouter.router);
 app.use(gameRouter.router);
+app.use(mailRoute.router);
 
 /*
 The following function is a nice way to replace items in html files
@@ -140,6 +143,10 @@ app.get('/leaderboard', cors(), (req, res) => {
 
 app.get('/rules', cors(), (req, res) => {
     res.send(setNavAuthState(false) + rulepage + footer);
+});
+
+app.get('/contact', cors(), (req, res) => {
+    res.send(setNavAuthState(false) + contactPage + footer);
 });
 
 // app.get('/*', (req, res) => {
