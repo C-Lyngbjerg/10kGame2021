@@ -17,10 +17,11 @@
             </ul>
         </div>
         <div class="col-sm-4" id="obj">
-            <div class="row justify-content-center" style="margin-bottom: 2rem">
-                <ul class="list-group pt-md-5">
+            <div class="row justify-content-center" >
+                <h5 class="text-center">Turn Information</h5>
+                <ul class="list-group ">
                     <li class="list-group-item">
-                        <h5 style="text-align: center" id="status_message">Your turn</h5>
+                        <h5 class="text-center" id="status_message">Your turn</h5>
                     </li>
                 </ul>
             </div>
@@ -40,16 +41,17 @@
     </div>
 
     <!-- HORISONTAL LIST CONTAINING ROLLED DICE, ROLL AND BANK BUTTONS -->
-    <div class="row justify-content-between" style="margin-top: 5rem">
+    <div class="row justify-content-between" id="button_dice_div">
         <div class="col-sm-2" id="obj">
-            <button id="roll_button" class="btn btn-light btn-lg">Roll</button>
+            <button id="roll_button" class="btn btn-lg btn-light">Roll</button>
         </div>
         
         <ul class="col-sm-8 justify-content-center list-group list-group-horizontal" id="dice_list"></ul>
         
         <div class="col-sm-2" id="obj">
-            <button id="bank_button" class="btn btn-light btn-lg">Bank</button>
+            <button id="bank_button" class="btn btn-lg btn-light">Bank</button>
         </div>
     </div>
 </div>
-<script src="./play.js"></script>
+<script src="../play/play.js"></script>
+<link rel="stylesheet" href="../play/play.css">

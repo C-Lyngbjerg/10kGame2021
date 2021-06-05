@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../header/header.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">    <title>10k Game</title>
-    <link rel="text/html" href="../leaderboardpage/leaderboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"/>
+    <link rel="stylesheet" href="../header/header.css">
     <title>10k Game</title>
 </head>
-<body >
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light justify-content-between">
+<body class="bg-light">
+    <!-- Necessary for cookieconsent element -->
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+    <script src="../header/header.js"></script>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light justify-content-between">
         <!-- Navbar text-->
         <div >
-            <a class="navbar-brand" style="padding-left: 3rem;"href="/">
-                Home
-            </a>
+            <ul id="navLinkList"class="navbar-nav mx-auto">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="/" id="home_nav"> Home</a>
+                </li>
+            </ul>
         </div>
         <div >
-            <ul id="navLinkList"class="navbar-nav" style="padding-right: 3rem;">
+            <ul id="navLinkList"class="navbar-nav">
                 <li class="nav-item active">
                     <a class="nav-item nav-link" href="/leaderboard"> Leaderboard</a>
                 </li>
@@ -28,25 +35,19 @@
                     <a class="nav-item nav-link" href="/"> Contact</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-item nav-link" href="/rules"> Rules</a> <!--https://en.wikipedia.org/wiki/Dice_10000-->
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-item nav-link" href="/profile">Profile page</a>                    
+                    <a class="nav-item nav-link" href="/rules"> Rules</a>
                 </li>
                 <li class="nav-item active">
                    <a class="nav-item nav-link" href="/chat"> Chat</a>
                 </li>
             </ul>
         </div>
-        <!-- Links -->
-        <div >
+        <div>
             <ul id="navLinkList"class="navbar-nav ms-auto">
-            
-            <li class="nav-item active">
-                <a class="nav-item nav-link" href="/login"> Log In</a>
-            </li>
-        </ul>
+                <li class="nav-item active">
+                    <a class="navbar-brand" id="login_nav" href="/login"> Log In</a>
+                </li>
+            </ul>
         </div>
-
     </nav>
-    <div class="container-fluid" style="min-height: calc(100vh - 100px); margin-top: 5rem;">
+    <div class="container-fluid">
