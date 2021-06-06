@@ -12,7 +12,7 @@ login page in future for redirect based on that.
 */
 router.post('/auth/login',
 body('email').isEmail().withMessage('Email is not valid. Use format \'xxx@xxx.xxx\''), 
-body('u_password').isLength({min:6}).withMessage('Password is incorrect'),
+body('u_password').isLength({min:6}).matches(/\d/).withMessage('Password is incorrect'),
     cors(), (req, res) => {
     let user = {
         email: req.body.email,

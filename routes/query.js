@@ -11,9 +11,10 @@ const saltRounds = 12;
 // ----------------------------- CREATE ----------------------------- //
 // Create User
 router.post('/api/create-user', 
-body('email').isEmail(),
-body('u_password').isLength({min: 6}), 
+body('email').isEmail().withMessage('Not a valid email'),
+body('u_password').isLength({min: 6}).withMessage('Must be atlest 6 char long'), 
 async (req, res) => {
+
     console.log(req.body);
     let user = {
         email: req.body.email,
@@ -21,11 +22,14 @@ async (req, res) => {
         mmr: 1000,
         u_password: req.body.u_password,
     };
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    
+    const result = validationResult(req);
+    console.log(result);
+    console.log(result.errors[0].msg);
+    if (!result.isEmpty()) {
         return res.status(400).json({
             success: false,
-            errors: errors.array()
+            errors: result.array()
         });
     }
 

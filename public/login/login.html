@@ -26,9 +26,11 @@
             <h3>Sign up here</h3>
             <form method="POST" action="/api/create-user">
                 <div class="form-group">
+                    <p id="emailChange"></p>
                     <input class="form-control" name="email" id="su_email" placeholder="Email" />
                 </div>
-                <div class="form-group"><p id="emailChange"></p>
+                <div class="form-group">
+                    <p id="UsernameChange"></p>
                     <input
                         class="form-control"
                         name="u_name"
@@ -37,6 +39,7 @@
                     />
                 </div>
                 <div class="form-group">
+                    <p id="passwordChange"></p>
                     <input
                         class="form-control"
                         type="password"
