@@ -115,8 +115,10 @@ function calculatePoints(diceForPointCalculation) {
                 score += die.count * 100;
             } else if (die.name === 5 && die.count < 3) {
                 score += die.count * 50;
-            } else {
+            } else if (die.count === 3){
                 score += die.name * die.multiplier;
+            } else if (die.count > 3){
+                score += (die.name * die.multiplier) * ((die.count-3)*2);
             }
             console.log('score: ',score);
         }
