@@ -19,26 +19,26 @@ async function getAllUsers() {
 
 // --- Creates Leaderboard table and fill it with users, with the highest MMR at the top --- //
 function testTable(result) {
-    let c, r, t, div;
+    let cell, row, table, div;
     // Creates the table tag, that the other elements will append
-    t = document.createElement('table');
-    t.classList.add('table');
+    table = document.createElement('table');
+    table.classList.add('table');
     // iterate the result array, which contains all users sorted by MMR
     for (let i = 0; i < result.length; i++) {
-        r = t.insertRow(0); // Make one row
-        c = r.insertCell(0); // Make one cell in above row
-        c.innerText = result[i].u_name;
-        c = r.insertCell(1); // Second cell in row
-        c.innerText = result[i].mmr;
+        row = table.insertRow(0); // Make one row
+        cell = row.insertCell(0); // Make one cell in above row
+        cell.innerText = result[i].u_name;
+        cell = row.insertCell(1); // Second cell in row
+        cell.innerText = result[i].mmr;
         //The id on the div that starts the table
-        document.getElementById('leaderboard').appendChild(t);
+        document.getElementById('leaderboard').appendChild(table);
     }
     // This one creates the header, that describes each column
-    r = t.insertRow(0);
-    c = r.insertCell(0);
-    c.innerText = 'Name';
-    c.classList.add('hrFont');
-    c = r.insertCell(1);
-    c.innerText = 'MMR';
-    c.classList.add('hrFont');
+    row = table.insertRow(0);
+    cell = row.insertCell(0);
+    cell.innerText = 'Name';
+    cell.classList.add('hrFont');
+    cell = row.insertCell(1);
+    cell.innerText = 'MMR';
+    cell.classList.add('hrFont');
 }
