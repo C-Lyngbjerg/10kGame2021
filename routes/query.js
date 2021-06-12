@@ -4,41 +4,54 @@ const bcrypt = require('../util/password.js');
 const nodemailer = require('nodemailer');
 const env = require('dotenv');
 const { prototype } = require('nodemailer/lib/dkim');
+const { check, validationResult } = require('express-validator');
 
 const saltRounds = 12;
 
 // ----------------------------- CREATE ----------------------------- //
 // Create User
-router.post('/api/create-user', async (req, res) => {
-    console.log(req.body);
-    let user = {
-        email: req.body.email,
-        u_name: req.body.u_name,
-        mmr: 1000,
-        u_password: req.body.u_password,
-    };
+router.post(
+    '/api/create-user',
+    [
+        check('email').isEmail().withMessage('Not a valid email'),
+        check('u_password').isLength({ min: 6 }).withMessage('Must be atlest 6 char long'),
+    ],
+    async (req, res) => {
+        console.log(req.body);
+        let user = {
+            email: req.body.email,
+            u_name: req.body.u_name,
+            mmr: 1000,
+            u_password: req.body.u_password,
+        };
 
-    console.log(user);
-    user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
-    main(user);
-    con.query('INSERT INTO users SET ?', user, (error, results, fields) => {
-        if (error) {
-            console.log(error);
-            res.send({
-                code: 400,
-                failed: 'error occurred',
-                error: error,
-            });
-        } else {
-            console.log(results);
-            // res.send({
-            // "code":200,
-            // "success":"user registered sucessfully",
-            // "ID":results.insertID });
-            res.redirect('/play');
+        const result = validationResult(req);
+        
+        if (!result.isEmpty()) {
+            console.log(result);
+            console.log(result.errors[0].msg);
+            
+            return res.status(422).jsonp(result.array());
         }
-    });
-});
+
+        console.log(user);
+        user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
+        main(user);
+        con.query('INSERT INTO users SET ?', user, (error, results, fields) => {
+            if (error) {
+                console.log(error);
+                res.send({
+                    code: 400,
+                    failed: 'error occurred',
+                    error: error,
+                });
+            } else {
+                console.log(results);
+                res.redirect('/play');
+            }
+        });
+    },
+);
 
 // ----------------------------- READ ----------------------------- //
 // Read All
@@ -107,7 +120,8 @@ router.delete('/api/delete-user/:id', (req, res) => {
     });
 });
 
-// ------------------------- NODEMAILER ----------------------------- //
+// ------------------------- NODEMAILER for Registration----------------------------- //
+
 async function main(user) {
     const htmlMessage = `
     <h1>Welcome to 10KGame ${user.u_name}</h1>
@@ -121,31 +135,13 @@ async function main(user) {
     </table>
 `;
     console.log('this: ', user);
-    // Only needed if you don't have a real mail account for testing
-    let testAccount = await nodemailer.createTestAccount();
-
-    // create reusable transporter object using the default SMTP transport
-    /*let transporter = nodemailer.createTransport({
-      host: "imap.gmail.com",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER, // generated ethereal user
-        pass: process.env.EMAIL_PASSWORD, // generated ethereal password
-      },
-      tls:{
-        rejectUnauthorized:false
-        }
-    });*/
     const transporter = nodemailer.createTransport({
-    service:'Gmail',
-    auth: {
-        user: process.env.EMAIL_USER, // generated ethereal user
-        pass: process.env.EMAIL_PASSWORD, // generated ethereal password
-      },
+        service: 'Gmail',
+        auth: {
+            user: process.env.EMAIL_USER, // generated ethereal user
+            pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+        },
     });
-
-  
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
