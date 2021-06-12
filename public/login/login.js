@@ -28,6 +28,15 @@ $('#sign_up').click(function (e) {
             }
             errorsContainer.html(errorsList);
         },
+        statusCode: {
+            409: function(responseObject, textStatus, jqXHR) {
+                $('#error-group').css('display', 'block');
+                let errorsContainer = $('#errors');
+                errorsContainer.innerHTML = '';
+                let errorsList = '<li>Email already in use</li>';
+                errorsContainer.html(errorsList);
+            }
+        },
     });
 });
 

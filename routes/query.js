@@ -33,11 +33,7 @@ router.post(
             
             return res.status(422).jsonp(result.array());
         }
-
-        console.log(user);
-        user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
-        main(user);
-        con.query('INSERT INTO users SET ?', user, (error, results, fields) => {
+        con.query('SELECT email FROM users WHERE email = ?', user.email, async (error, results, fields) => {
             if (error) {
                 console.log(error);
                 res.send({
@@ -45,9 +41,26 @@ router.post(
                     failed: 'error occurred',
                     error: error,
                 });
+            } else if(results.length > 0){
+                console.log('select results1: ',results);
+                res.status(409).send({});
             } else {
-                console.log(results);
-                res.redirect('/play');
+                console.log('select results2: ',results.length);
+                user.u_password = await bcrypt.hashPass(req.body.u_password, saltRounds);
+                main(user);
+                con.query('INSERT INTO users SET ?', user, (error, results, fields) => {
+                    if (error) {
+                        console.log(error);
+                        res.send({
+                            code: 400,
+                            failed: 'error occurred',
+                            error: error,
+                        });
+                    } else {
+                        console.log('insert results: ',results);
+                        res.redirect('/play');
+                    }
+                });
             }
         });
     },
