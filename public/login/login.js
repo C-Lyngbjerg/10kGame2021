@@ -1,10 +1,5 @@
 $('#sign_up').click(function (e) {
     e.preventDefault();
-    // let user = {
-    //     email: $('#su_email').val(),
-    //     u_name: $('#su_u_name').val(),
-    //     u_password: $('#su_u_password').val(),
-    // };
     $.ajax({
         method: 'POST',
         data: JSON.stringify({
@@ -48,14 +43,9 @@ $('#log_in').click(async function (e) {
         url: '/auth/login',
         error: function (data) {
             $('#error-group').css('display', 'block');
-            const errors = JSON.parse(data.responseText);
             let errorsContainer = $('#errors');
             errorsContainer.innerHTML = '';
-            let errorsList = '';
-
-            for (let i = 0; i < errors.length; i++) {
-                errorsList += '<li>' + errors[i].msg + '</li>';
-            }
+            let errorsList = '<li> Either email or password was incorrect</li>';
             errorsContainer.html(errorsList);
         },
     });
