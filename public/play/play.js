@@ -49,9 +49,7 @@ $(document).ready(async () => {
     getDiceRolls();
 });
 
-/*  -------------------------- ROLL_BUTTON -------------------------- 
-    On click for roll button
-*/
+/*  -------------------------- ROLL_BUTTON -------------------------- */
 $('#roll_button').click(async function () {
     // 1. Populate chosenDice Array
     turnInfo.chosenDice = chosenDiceFromCheckBoxes();
@@ -64,10 +62,7 @@ $('#roll_button').click(async function () {
     getDiceRolls();
 });
 
-/* -------------------------- BANK_BUTTON -------------------------- 
-NOTE: add getPointsCalculation(); to bank button so you dont choose, roll and then bank.
-Should be choose and then bank or roll.
-*/
+/* -------------------------- BANK_BUTTON -------------------------- */
 $('#bank_button').click(async () =>  {
     // 1. Populate chosenDice Array
     turnInfo.chosenDice = chosenDiceFromCheckBoxes();
@@ -79,8 +74,7 @@ $('#bank_button').click(async () =>  {
     endTurn(true);
 });
 
-/* -------------------------- BANK_BUTTON --------------------------
- */
+/* -------------------------- BANK_BUTTON -------------------------- */
 $('#ready_button').click(function () {
 
     beginNewTurn();

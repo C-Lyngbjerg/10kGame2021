@@ -14,7 +14,7 @@ router.post(
     '/auth/login',
     [
         check('email').isEmail().withMessage("Email is not valid. Use format 'xxx@xxx.xxx'"),
-        check('u_password').isLength({ min: 6 }).withMessage('Password is incorrect'),
+        check('u_password').isLength({ min: 6 }).withMessage('Password is incorrect')
     ],
     cors(),
     (req, res) => {
@@ -30,10 +30,7 @@ router.post(
             return res.status(422).jsonp(result.array());
         }
         let loginResult;
-        con.query(
-            'SELECT * FROM `users` WHERE email = ?',
-            user.email,
-            async (err, result, fields) => {
+        con.query('SELECT * FROM `users` WHERE email = ?', user.email, async (err, result, fields) => {
                 if (!err) {
                     loginResult = await bcrypt.comparePass(user.u_password, result[0].u_password);
                     if (loginResult) {
@@ -43,20 +40,7 @@ router.post(
                         req.session.u_name = result[0].u_name;
                         req.session.mmr = result[0].mmr;
 
-                        console.log(
-                            'success: ' +
-                                loginResult +
-                                ', isAuth: ' +
-                                req.session.isAuth +
-                                ', user: ' +
-                                req.session.u_name +
-                                ', email: ' +
-                                req.session.email +
-                                ', userID: ' +
-                                req.session.u_id +
-                                ', ID: ' +
-                                req.session.id,
-                        );
+                        console.log('successfully logged in');
                         res.redirect('/');
                     } else {
                         console.log('failure: ' + loginResult);
@@ -91,18 +75,7 @@ router.get('/auth/is_auth', (req, res) => {
 router.post('/auth/get-user', (req, res) => {
     if (req.session.isAuth) {
         console.log(req.session.isAuth);
-        console.log(
-            'isAuth: ' +
-                req.session.isAuth +
-                ', user: ' +
-                req.session.u_name +
-                ', email: ' +
-                req.session.email +
-                ', userID: ' +
-                req.session.u_id +
-                ', ID: ' +
-                req.session.id,
-        );
+        console.log('isAuth');
 
         const user = {
             user: req.session.u_name,
