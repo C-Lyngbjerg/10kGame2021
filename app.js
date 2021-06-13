@@ -77,16 +77,6 @@ app.use(authRouter.router);
 app.use(gameRouter.router);
 app.use(mailRoute.router);
 
-/*
-The following function is a nice way to replace items in html files
-below this general example is a more specific one that probably should be written more generally at a later time 
-CLB - 21.05.18
-
-function setNavActive(navItem) {
-    return header.replace(`"nav-link" href="/${navItem}`, `"nav-link active" href="/${navItem}`)
-}
-*/
-
 /* ------------------------------ NAVBAR REPLACE FUNCTION ------------------------------ */
 function setNavAuthState(isAtProfilePage) {
     if (isAtProfilePage) {
@@ -148,12 +138,6 @@ app.get('/rules', cors(), (req, res) => {
 app.get('/contact', cors(), (req, res) => {
     res.send(setNavAuthState(false) + contactPage + footer);
 });
-
-// app.get('/*', (req, res) => {
-//     // implement errorPage
-//     // res.send(header + errorPage + footer);
-
-// });
 
 /* ------------------------------ PORT & .LISTEN ------------------------------ */
 const PORT = process.env.PORT || 8080;

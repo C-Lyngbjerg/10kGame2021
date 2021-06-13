@@ -28,7 +28,7 @@ socket.on("response", (data) => {
 async function getUser() {
     await $.ajax({
         method: 'POST',
-        data: {}, //JSON.stringify(user),
+        data: {},
         headers: { 'Content-type': 'application/json' },
         url: '/auth/get-user',
         success: (data) => {

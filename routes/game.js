@@ -86,14 +86,12 @@ router.post('/game/calculate', (req, res) => {
     res.send({ turnInfo: turnInfo, user: user });
 });
 
-// TODO: endturn() reset diceLeft
 router.post('/game/end-turn', (req, res) => {
     turnInfo = req.body.turnInfo;
     turnInfo.aiBankPoints += 100;
     res.send({ turnInfo: turnInfo });
 });
 
-// NOTE: needs input validation
 function calculatePoints(diceForPointCalculation) {
     let score = 0;
     console.log('diceForPointCalculation: ',diceForPointCalculation);

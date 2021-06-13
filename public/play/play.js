@@ -92,7 +92,6 @@ $('#ready_button').click(function () {
 */
 
 // ------------ GET FUNCTIONS ------------
-// TODO: fix ajax style to match calculatePoints()
 function getDiceRolls() {
     $.ajax({
         method: 'POST',
@@ -157,7 +156,7 @@ function chosenDiceFromCheckBoxes() {
     tempArray = [];
     validDiceArray.map((die) => {
         if ($('#cb_' + die.name).is(':checked')) {
-            tempArray.push(die.value); // NOTE: returns just the number value
+            tempArray.push(die.value);
         }
     });
     console.log('chosenDiceFromCheckBoxes', tempArray);
@@ -165,8 +164,6 @@ function chosenDiceFromCheckBoxes() {
     return tempArray;
 }
 
-// NOTE: WIP
-// trying to make it general to both in- and voluntary ending of turns
 function endTurn(voluntary) {
     console.log('endturn: ', turnInfo);
     const voluntaryBoolean = voluntary;
@@ -231,7 +228,6 @@ function populateDiceList(die, diceList) {
 }
 
 // returns true if any viable dice combination has been rolled eg 1, 5 or 3 of a kind
-// NOTE: check if way to do variable with parameters or not worth changing
 function checkValuesRolled(data) {
     let valuesCountArray = [0, 0, 0, 0, 0, 0, 0];
     data.map((die) => {
@@ -243,8 +239,6 @@ function checkValuesRolled(data) {
         return false;
     }
 }
-
-
 
 // updates the displayed names and points values
 function updateDisplay() {

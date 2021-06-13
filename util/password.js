@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 
-
 const hashPass = async (password, saltRounds) => {
     try {
         // Generate a salt
@@ -21,13 +20,6 @@ const comparePass = async (plaintextPassword, hashedPassword) => {
 
     }
 }
-
-// bcrypt.hash(plainTextPassword, saltRounds, (error, hash) => {
-//     console.log(hash);
-// });
-// bcrypt.compare(plainTextPassword, hashedPassword, (error, result) => {
-//     console.log(result);
-// });
 
 module.exports = {
     bcrypt,

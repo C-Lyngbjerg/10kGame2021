@@ -4,35 +4,26 @@
 3. Vis personlig velkomst, mmr m.m
 */
 
-$(document).ready(function () {
+$(document).ready(async function () {
     // On load change name of player to actual player username
     console.log("hello");
-    getUser();
+    await getUser();
     $('#profileHeadName').text('Welcome back ' + user.user);
     $('#userName').text(user.user);
     $('#userEmail').text(user.email);
     $('#userMMR').text(user.mmr);
-    /*
-    titleName.text(user.user + ' is playing vs AI');
-    tempName.text(user.user + ': 100');
-    bankName.text(user.user + ': 0');
-    // get initial diceRolls
-    getDiceRolls();
-    */
+
 });
 
-function getUser() {
-    $.ajax({
+async function getUser() {
+    await $.ajax({
         type: 'POST',
-        async: false,
-        data: {}, //JSON.stringify(user),
+        data: {}, 
         contentType: 'application/json',
         url: '/auth/get-user',
         success: function (data) {
             console.log('success');
-            console.log(data);
             user = data;
-            console.log(user);
         },
     });
 }
